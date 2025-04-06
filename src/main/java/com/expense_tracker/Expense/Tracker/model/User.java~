@@ -1,0 +1,45 @@
+package com.expense_tracker.Expense.Tracker.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name="user")
+@Setter
+@Getter
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class User {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
+    private int userId;
+
+    @Column(name="user_name")
+    private String userName;
+
+    @Column(name="password")
+    private String password;
+
+    @Column(name="first_name")
+    private String FirstName;
+
+    @Column(name="last_name")
+    private String LastName;
+
+    @OneToMany(mappedBy = "user_transaction_id")
+    private List<Transaction> transactionList;
+
+    @OneToMany(mappedBy = "user_category")
+    private List<Category> categoryList;
+
+    @OneToMany(mappedBy = "user_authority")
+    private List<Authorities> authoritiesList;
+
+}
