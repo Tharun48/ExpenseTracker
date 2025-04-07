@@ -45,13 +45,8 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserDetailsResponseDTO> getUser(@PathVariable int userId) {
         UserDetails userDetails =  user.getUser(userId);
-        UserDetailsResponseDTO dto = new UserDetailsResponseDTO(
-                userDetails.getUserId(),
-                userDetails.getUserName(),
-                userDetails.getFirstName(),
-                userDetails.getLastName()
-        );
-        return ResponseEntity.ok(dto);
+        UserDetailsResponseDTO userDetailsResponseDTO = modelMapper.map(userDetails, UserDetailsResponseDTO.class);
+        return ResponseEntity.ok(new UserDetailsResponseDTO(userDetailsResponseDTO.userId(), userDetailsResponseDTO.userName(), userDetailsResponseDTO.firstName(), userDetailsResponseDTO.lastName()));
     }
 
 }

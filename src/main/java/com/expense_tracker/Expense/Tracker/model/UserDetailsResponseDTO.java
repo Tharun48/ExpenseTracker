@@ -1,11 +1,9 @@
 package com.expense_tracker.Expense.Tracker.model;
 
-public record UserRequestDTO(
-        String userId,
+public record UserDetailsResponseDTO(
+        int userId,
         String userName,
-        String password,
         String firstName,
         String lastName
 ) {
-
 }

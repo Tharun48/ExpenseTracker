@@ -34,13 +34,11 @@ public class UserDAOImp implements UserDAO{
     @Override
     public int modifyUserDetailsDAO(UserDetails user) {
         entityManager.merge(user);
-        return user.getUserId();
     }
 
     @Override
     public int deleteUserDAO(int userId) {
         UserDetails user = getUserDAO(userId);
         entityManager.remove(user);
-        return userId;
     }
 }

@@ -28,13 +28,11 @@ public class UserImp implements User{
     }
 
     @Override
-    @Transactional
     public int modifyUserDetails(UserDetails user) {
         return userDAO.modifyUserDetailsDAO(user);
     }
 
     @Override
-    @Transactional
     public int deleteUser(int userId) {
         return userDAO.deleteUserDAO(userId);
     }

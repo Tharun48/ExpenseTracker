@@ -17,7 +17,6 @@ public class ExpenseTrackerApplication {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration()
 				.setFieldMatchingEnabled(true)
-				.setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
 				.setSkipNullEnabled(true);
 		return modelMapper;
 	}
