@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "transaction")
-@NoArgsConstructor
 public class Transaction {
 
     @Id
@@ -16,10 +16,10 @@ public class Transaction {
     private int transactionId;
 
     @Column(name="date")
-    private Date createdOn;
+    private LocalDate createdOn;
 
     @Column(name="transaction_category")
-    private String transactionCategory;
+    private int transactionCategory;
 
     @Column(name="description")
     private String description;
@@ -31,5 +31,60 @@ public class Transaction {
     @JoinColumn(name="user_id")
     private UserDetails user_transaction_id;
 
+    public Transaction() {}
 
+    public Transaction(int transactionCategory, String description, double transactionAmount, UserDetails user_transaction_id) {
+        this.transactionCategory = transactionCategory;
+        this.description = description;
+        this.transactionAmount = transactionAmount;
+        this.user_transaction_id = user_transaction_id;
+    }
+
+    public int getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public int getTransactionCategory() {
+        return transactionCategory;
+    }
+
+    public void setTransactionCategory(int transactionCategory) {
+        this.transactionCategory = transactionCategory;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(double transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+
+    public UserDetails getUser_transaction_id() {
+        return user_transaction_id;
+    }
+
+    public void setUser_transaction_id(UserDetails user_transaction_id) {
+        this.user_transaction_id = user_transaction_id;
+    }
 }

@@ -1,0 +1,13 @@
+package com.expense_tracker.Expense.Tracker.model;
+
+import java.time.LocalDate;
+
+public record TransactionDetailsResponseDTO(
+        Double transactionAmount,
+        String description,
+        int transactionCategory,
+        int userId,
+        LocalDate date
+) {
+
+}

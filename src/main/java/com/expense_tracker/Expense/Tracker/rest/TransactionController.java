@@ -1,9 +1,63 @@
 package com.expense_tracker.Expense.Tracker.rest;
 
+import com.expense_tracker.Expense.Tracker.model.*;
+import com.expense_tracker.Expense.Tracker.service.TransactionDetails;
+import com.expense_tracker.Expense.Tracker.service.User;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+@RestController
 public class TransactionController {
 
+    TransactionDetails transactionDetails;
+    User user;
+    private final ModelMapper modelMapper;
 
+    @Autowired
+    public TransactionController(TransactionDetails transactionDetails,ModelMapper modelMapper,User user) {
+        this.transactionDetails = transactionDetails;
+        this.modelMapper=modelMapper;
+        this.user=user;
+    }
 
+    @PostMapping("/transaction")
+    public ResponseEntity<TransactionResponseDTO> saveTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+        UserDetails userDetails = user.getUser(transactionRequestDTO.userId());
+        Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails);
+        transaction.setUser_transaction_id(userDetails);
+        int transactionId = transactionDetails.saveTransaction(transaction);
+        return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
+    }
 
+    @PutMapping("/transaction")
+    public ResponseEntity<TransactionResponseDTO> modifyTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+        UserDetails userDetails = user.getUser(transactionRequestDTO.userId());
+        Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails);
+        transaction.setUser_transaction_id(userDetails);
+        transaction.setTransactionId(transactionRequestDTO.transactionId());
+        int transactionId = transactionDetails.modifyTransactionDetails(transaction);
+        return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
+    }
+
+    @GetMapping("/transaction/{transactionId}")
+    public ResponseEntity<TransactionDetailsResponseDTO> getTransaction(@PathVariable int transactionId) {
+        Transaction transaction = transactionDetails.getTransaction(transactionId);
+        TransactionDetailsResponseDTO transactionDetailsResponseDTO = new TransactionDetailsResponseDTO(
+                transaction.getTransactionId(),
+                transaction.getUser_transaction_id().getUserId(),
+                transaction.getTransactionAmount(),
+                transaction.getDescription(),
+                transaction.getTransactionCategory(),
+                transaction.getCreatedOn()
+        );
+        return ResponseEntity.ok(transactionDetailsResponseDTO);
+    }
+
+    @DeleteMapping("/transaction/{transactionId}")
+    public ResponseEntity<TransactionResponseDTO> deleteTransaction(@PathVariable int transactionId) {
+        transactionDetails.deleteTransaction(transactionId);
+        return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
+    }
 
 }

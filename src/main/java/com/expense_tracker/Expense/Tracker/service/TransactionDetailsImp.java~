@@ -1,17 +1,24 @@
 package com.expense_tracker.Expense.Tracker.service;
 
 import com.expense_tracker.Expense.Tracker.dao.TransactionDAO;
+import com.expense_tracker.Expense.Tracker.dao.UserDAO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
+import com.expense_tracker.Expense.Tracker.model.UserDetails;
+import jakarta.transaction.Transactional;
+
 public class TransactionDetailsImp implements TransactionDetails{
 
     TransactionDAO transactionDAO;
-    TransactionDetailsImp(TransactionDAO transactionDAO){
+    UserDAO userDAO;
+    TransactionDetailsImp(TransactionDAO transactionDAO,UserDAO userDAO){
         this.transactionDAO = transactionDAO;
+        this.userDAO = userDAO;
     }
 
     @Override
-    public void saveTransaction(Transaction transaction) {
-        transactionDAO.saveTransactionDAO(transaction);
+    @Transactional
+    public int saveTransaction(Transaction transaction) {
+        return transactionDAO.saveTransactionDAO(transaction);
     }
 
     @Override
@@ -20,12 +27,14 @@ public class TransactionDetailsImp implements TransactionDetails{
     }
 
     @Override
-    public void modifyTransactionDetails(Transaction transaction) {
-        transactionDAO.modifyTransactionDetailsDAO(transaction);
+    @Transactional
+    public int modifyTransactionDetails(Transaction transaction) {
+        return transactionDAO.modifyTransactionDetailsDAO(transaction);
     }
 
     @Override
-    public void deleteTransaction(int transactionId) {
-        transactionDAO.deleteTransactionDAO(transactionId);
+    @Transactional
+    public int deleteTransaction(int transactionId) {
+        return transactionDAO.deleteTransactionDAO(transactionId);
     }
 }
