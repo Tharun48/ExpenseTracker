@@ -5,8 +5,13 @@ import com.expense_tracker.Expense.Tracker.service.TransactionDetails;
 import com.expense_tracker.Expense.Tracker.service.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 public class TransactionController {
 
@@ -59,5 +64,15 @@ public class TransactionController {
         transactionDetails.deleteTransaction(transactionId);
         return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
     }
+
+    @GetMapping("/transaction/saving/{userId}")
+    public ResponseEntity<SavingsResponseDTO> getSavings(
+            @PathVariable int userId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
+        SavingsResponseDTO savingsResponseDTO = transactionDetails.savings(userId,fromDate,toDate);
+        return ResponseEntity.ok(savingsResponseDTO);
+    }
+
 
 }

@@ -11,5 +11,5 @@ public interface TransactionDetails {
     Transaction getTransaction(int transactionId);
     int modifyTransactionDetails(Transaction transaction);
     int deleteTransaction(int transactionId);
-    List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate);
+    SavingsResponseDTO savings(int userId, LocalDate fromDate, LocalDate toDate);
 }
