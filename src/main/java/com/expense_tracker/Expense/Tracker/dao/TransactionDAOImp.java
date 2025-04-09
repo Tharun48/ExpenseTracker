@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker.dao;
 
+import com.expense_tracker.Expense.Tracker.model.SavingsResponseDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
 import com.expense_tracker.Expense.Tracker.repository.TransactionRepository;
 import jakarta.persistence.EntityManager;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public class TransactionDAOImp implements TransactionDAO{
@@ -23,6 +25,7 @@ public class TransactionDAOImp implements TransactionDAO{
     @Override
     public int saveTransactionDAO(Transaction transaction) {
         transaction.setCreatedOn(LocalDate.now());
+        transaction.setTransactionAmount(Math.abs(transaction.getTransactionAmount()));
         Transaction transaction1 = entityManager.merge(transaction);
         return transaction1.getTransactionId();
     }
@@ -39,6 +42,7 @@ public class TransactionDAOImp implements TransactionDAO{
     @Override
     public int modifyTransactionDetailsDAO(Transaction transaction) {
         transaction.setCreatedOn(LocalDate.now());
+        transaction.setTransactionAmount(Math.abs(transaction.getTransactionAmount()));
         entityManager.merge(transaction);
         return transaction.getTransactionId();
     }
@@ -48,5 +52,10 @@ public class TransactionDAOImp implements TransactionDAO{
         Transaction transaction = getTransactionDAO(transactionId);
         entityManager.remove(transaction);
         return transactionId;
+    }
+
+    @Override
+    public List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate) {
+        return transactionRepository.findTransactionByUserIdAndDataRange(userId,fromDate,toDate);
     }
 }

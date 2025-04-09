@@ -1,0 +1,9 @@
+package com.expense_tracker.Expense.Tracker.model;
+
+public record CategoryRequestDTO(
+        int categoryId,
+        String categoryName,
+        int categoryType,
+        
+) {
+}

@@ -1,10 +1,15 @@
 package com.expense_tracker.Expense.Tracker.service;
 
+import com.expense_tracker.Expense.Tracker.model.SavingsResponseDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface TransactionDetails {
     int saveTransaction(Transaction transaction);
     Transaction getTransaction(int transactionId);
     int modifyTransactionDetails(Transaction transaction);
     int deleteTransaction(int transactionId);
+    List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate);
 }

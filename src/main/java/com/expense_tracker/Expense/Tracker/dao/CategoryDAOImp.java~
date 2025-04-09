@@ -36,7 +36,6 @@ public class CategoryDAOImp implements CategoryDAO{
     @Override
     public int modifyCategory(Category category) {
         entityManager.merge(category);
-        return category.getCategoryId();
     }
 
     @Override

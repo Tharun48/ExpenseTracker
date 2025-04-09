@@ -1,0 +1,4 @@
+package com.expense_tracker.Expense.Tracker.service;
+
+public interface Savings {
+}

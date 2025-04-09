@@ -15,7 +15,7 @@ public class Transaction {
     @Column(name="transaction_id")
     private int transactionId;
 
-    @Column(name="date")
+    @Column(name="transaction_date")
     private LocalDate createdOn;
 
     @Column(name="transaction_category")
@@ -30,6 +30,11 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name="user_id")
     private UserDetails user_transaction_id;
+
+    public void addUser(UserDetails userDetails) {
+        this.user_transaction_id=userDetails;
+        userDetails.addTransaction(this);
+    }
 
     public Transaction() {}
 

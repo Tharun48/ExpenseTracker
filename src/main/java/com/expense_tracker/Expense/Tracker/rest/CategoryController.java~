@@ -47,7 +47,6 @@ public class CategoryController {
         UserDetails userDetails = user.getUser(categoryRequestDTO.userId());
         Category category = new Category(categoryRequestDTO.categoryName(),categoryRequestDTO.categoryType(),userDetails);
         category.addUser(userDetails);
-        category.setCategoryId(categoryRequestDTO.categoryId());
         int categoryId =  categoryDetails.modifyCategoryDAO(category);
         return ResponseEntity.ok(new CategoryResponseDTO(categoryId));
     }

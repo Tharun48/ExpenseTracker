@@ -4,7 +4,9 @@ import com.expense_tracker.Expense.Tracker.dao.CategoryDAO;
 import com.expense_tracker.Expense.Tracker.model.Category;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CategoryImp implements CategoryDetails {
 
     CategoryDAO categoryDAO;
@@ -14,8 +16,11 @@ public class CategoryImp implements CategoryDetails {
 
     @Override
     @Transactional
-    public void saveCategoryDAO(Category category) {
-        categoryDAO.save(category);
+    public int saveCategoryDAO(Category category) {
+        if(!isValidCategoryType(category.getCategoryType())) {
+            throw new IllegalArgumentException("Invalid category type " + category.getCategoryType());
+        }
+        return categoryDAO.save(category);
     }
 
     @Override
@@ -25,12 +30,23 @@ public class CategoryImp implements CategoryDetails {
 
     @Override
     @Transactional
-    public void modifyCategoryDAO(Category category) {
-        categoryDAO.modifyCategory(category);
+    public int modifyCategoryDAO(Category category) {
+        if(!isValidCategoryType(category.getCategoryType())) {
+            throw new IllegalArgumentException("Invalid category type " + category.getCategoryType());
+        }
+        return categoryDAO.modifyCategory(category);
     }
 
     @Override
-    public void deleteCategoryDAO(int categoryId) {
-        categoryDAO.deleteCategory(categoryId);
+    @Transactional
+    public int deleteCategoryDAO(int categoryId) {
+        return categoryDAO.deleteCategory(categoryId);
     }
+
+    public boolean isValidCategoryType(int categoryType)   {
+        return categoryType==1 || categoryType==2;
+    }
+
+
+
 }

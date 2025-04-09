@@ -25,7 +25,7 @@ public class TransactionController {
     public ResponseEntity<TransactionResponseDTO> saveTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
         UserDetails userDetails = user.getUser(transactionRequestDTO.userId());
         Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails);
-        transaction.setUser_transaction_id(userDetails);
+        transaction.addUser(userDetails);
         int transactionId = transactionDetails.saveTransaction(transaction);
         return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
     }

@@ -2,10 +2,14 @@ package com.expense_tracker.Expense.Tracker.service;
 
 import com.expense_tracker.Expense.Tracker.dao.TransactionDAO;
 import com.expense_tracker.Expense.Tracker.dao.UserDAO;
+import com.expense_tracker.Expense.Tracker.model.SavingsResponseDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
 import com.expense_tracker.Expense.Tracker.model.UserDetails;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class TransactionDetailsImp implements TransactionDetails{
@@ -39,4 +43,11 @@ public class TransactionDetailsImp implements TransactionDetails{
     public int deleteTransaction(int transactionId) {
         return transactionDAO.deleteTransactionDAO(transactionId);
     }
+
+    @Override
+    public List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate) {
+        return transactionDAO.savings(userId,fromDate,toDate);
+    }
+
+
 }
