@@ -4,6 +4,6 @@ import java.util.Map;
 
 public record SavingsResponseDTO(
         double savings,
-        Map<String,Double> amountspentIndividuallyOn
+        Map<String,Double> map
 ) {
 }

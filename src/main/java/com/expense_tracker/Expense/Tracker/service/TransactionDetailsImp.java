@@ -54,6 +54,8 @@ public class TransactionDetailsImp implements TransactionDetails{
         for(Transaction transaction:transactionList) {
             totalSavings+=(transaction.getTransactionCategory()==1) ? transaction.getTransactionAmount() : -1*transaction.getTransactionAmount();
             String description = transaction.getDescription();
+            description = description.trim();
+            description=description.toLowerCase();
             if(transaction.getTransactionCategory()==2) {
                 if(map.containsKey(description)) {
                     map.put(description,map.get(description)+transaction.getTransactionAmount());
