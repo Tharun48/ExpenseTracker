@@ -1,0 +1,20 @@
+package com.expense_tracker.Expense.Tracker.exceptionhandler;
+
+import com.expense_tracker.Expense.Tracker.model.ExceptionHandlerResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
+@ControllerAdvice
+public class ExceptionHandler {
+
+    @org.springframework.web.bind.annotation.ExceptionHandler
+    public ResponseEntity<ExceptionHandlerResponse> exceptionHandler(IllegalArgumentException e) {
+        ExceptionHandlerResponse exceptionHandlerResponse =  new ExceptionHandlerResponse();
+        exceptionHandlerResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        exceptionHandlerResponse.setMessage(e.getMessage());
+        exceptionHandlerResponse.setTimestamp(System.currentTimeMillis());
+        return new ResponseEntity<>(exceptionHandlerResponse, HttpStatus.NOT_FOUND);
+    }
+
+}

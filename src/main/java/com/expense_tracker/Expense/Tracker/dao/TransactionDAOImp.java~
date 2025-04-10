@@ -57,7 +57,7 @@ public class TransactionDAOImp implements TransactionDAO{
     @Override
     public List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate) {
         if(fromDate!=null && toDate!=null) {
-            if(fromDate.isAfter(toDate)) throw new IllegalArgumentException("From date should be less than to date");
+            if(fromDate.isAfter(toDate)) throw new RuntimeException("fromDate should be less than toDate");
             return transactionRepository.getTransactionBetweenDateRange(userId,fromDate,toDate);
         }
         else if(fromDate==null && toDate==null){

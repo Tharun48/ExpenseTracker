@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker.dao;
 
+import com.expense_tracker.Expense.Tracker.exceptionhandler.BadRequestException;
 import com.expense_tracker.Expense.Tracker.model.SavingsResponseDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
 import com.expense_tracker.Expense.Tracker.repository.TransactionRepository;
@@ -57,7 +58,7 @@ public class TransactionDAOImp implements TransactionDAO{
     @Override
     public List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate) {
         if(fromDate!=null && toDate!=null) {
-            if(fromDate.isAfter(toDate)) throw new IllegalArgumentException("fromDate should be less than toDate");
+            if(fromDate.isAfter(toDate)) throw new BadRequestException("fromDate should be less than toDate");
             return transactionRepository.getTransactionBetweenDateRange(userId,fromDate,toDate);
         }
         else if(fromDate==null && toDate==null){

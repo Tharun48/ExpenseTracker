@@ -1,6 +1,7 @@
 package com.expense_tracker.Expense.Tracker.service;
 
 import com.expense_tracker.Expense.Tracker.dao.CategoryDAO;
+import com.expense_tracker.Expense.Tracker.exceptionhandler.BadRequestException;
 import com.expense_tracker.Expense.Tracker.model.Category;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class CategoryImp implements CategoryDetails {
     @Transactional
     public int saveCategoryDAO(Category category) {
         if(!isValidCategoryType(category.getCategoryType())) {
-            throw new IllegalArgumentException("Invalid category type " + category.getCategoryType());
+            throw new BadRequestException("Invalid category type " + category.getCategoryType());
         }
         return categoryDAO.save(category);
     }
@@ -32,7 +33,7 @@ public class CategoryImp implements CategoryDetails {
     @Transactional
     public int modifyCategoryDAO(Category category) {
         if(!isValidCategoryType(category.getCategoryType())) {
-            throw new IllegalArgumentException("Invalid category type " + category.getCategoryType());
+            throw new BadRequestException("Invalid category type " + category.getCategoryType());
         }
         return categoryDAO.modifyCategory(category);
     }
