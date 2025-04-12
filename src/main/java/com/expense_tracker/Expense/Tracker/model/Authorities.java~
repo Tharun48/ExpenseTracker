@@ -50,7 +50,6 @@ public class Authorities {
 
     public void addUser(UserDetails userDetails) {
         this.user_authority=userDetails;
-        userDetails.addAuthorities(this);
     }
 
 }

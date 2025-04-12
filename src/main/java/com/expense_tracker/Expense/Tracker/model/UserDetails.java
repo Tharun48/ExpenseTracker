@@ -116,6 +116,13 @@ public class UserDetails {
         categoryList.add(category);
     }
 
+    public void addAuthorities(Authorities authorities) {
+        if(authoritiesList==null) {
+            authoritiesList = new ArrayList<>();
+        }
+        authoritiesList.add(authorities);
+    }
+
 
     @OneToMany(mappedBy = "user_transaction_id")
     private List<Transaction> transactionList;

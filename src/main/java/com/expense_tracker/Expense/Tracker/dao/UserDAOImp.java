@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker.dao;
 
+import com.expense_tracker.Expense.Tracker.model.Authorities;
 import com.expense_tracker.Expense.Tracker.model.UserDetails;
 import com.expense_tracker.Expense.Tracker.repository.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -19,6 +20,11 @@ public class UserDAOImp implements UserDAO{
     @Override
     public int saveUserDAO(UserDetails user) {
         UserDetails userDetails= entityManager.merge(user);
+        Authorities authorities = new Authorities();
+        authorities.setAuthority("READ");
+        authorities.addUser(userDetails);
+        Authorities authorities1 = entityManager.merge(authorities);
+        userDetails.addAuthorities(authorities1);
         return userDetails.getUserId();
     }
 

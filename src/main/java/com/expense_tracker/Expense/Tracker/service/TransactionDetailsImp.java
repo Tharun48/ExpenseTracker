@@ -48,6 +48,7 @@ public class TransactionDetailsImp implements TransactionDetails{
 
     @Override
     public SavingsResponseDTO savings(int userId, LocalDate fromDate, LocalDate toDate) {
+        userDAO.getUserDAO(userId);
         List<Transaction> transactionList = transactionDAO.savings(userId,fromDate,toDate);
         double totalSavings=0;
         Map<String,Double> map = new HashMap<>();
@@ -64,7 +65,6 @@ public class TransactionDetailsImp implements TransactionDetails{
                     map.put(description,transaction.getTransactionAmount());
                 }
             }
-
         }
         return new SavingsResponseDTO(totalSavings,map);
     }

@@ -7,7 +7,10 @@ import com.expense_tracker.Expense.Tracker.model.UserResponseDTO;
 import com.expense_tracker.Expense.Tracker.service.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,16 +18,19 @@ public class UserController {
 
     User user;
     private ModelMapper modelMapper;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(User user,ModelMapper modelMapper) {
+    public UserController(User user, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.user = user;
         this.modelMapper=modelMapper;
+        this.passwordEncoder=passwordEncoder;
     }
 
     @PostMapping("/user")
     public ResponseEntity<UserResponseDTO> saveUser(@RequestBody UserRequestDTO userRequestDTO) {
         UserDetails userDetails = modelMapper.map(userRequestDTO, UserDetails.class);
+        userDetails.setPassword(passwordEncoder.encode(userRequestDTO.password()));
         int userID = user.saveUser(userDetails);
         return ResponseEntity.ok(new UserResponseDTO(userID));
     }
@@ -53,5 +59,11 @@ public class UserController {
         );
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/user/login/{email}/{password}")
+    public ResponseEntity<UserResponseDTO> loginUser(@PathVariable String email,@PathVariable String password) {
+        return ResponseEntity.ok(new UserResponseDTO(1));
+    }
+
 
 }

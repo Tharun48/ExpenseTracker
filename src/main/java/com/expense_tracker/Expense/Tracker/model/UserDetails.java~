@@ -109,6 +109,21 @@ public class UserDetails {
         transactionList.add(transaction);
     }
 
+    public void addCategory(Category category){
+        if(categoryList.isEmpty()) {
+            categoryList = new ArrayList<>();
+        }
+        categoryList.add(category);
+    }
+
+    public void addAuthorities(Authorities authorities) {
+        if(authoritiesList.isEmpty()) {
+            authoritiesList = new ArrayList<>();
+        }
+        authoritiesList.add(authorities);
+    }
+
+
     @OneToMany(mappedBy = "user_transaction_id")
     private List<Transaction> transactionList;
 
