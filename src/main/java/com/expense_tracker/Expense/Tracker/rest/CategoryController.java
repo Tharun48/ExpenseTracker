@@ -52,7 +52,4 @@ public class CategoryController {
         return ResponseEntity.ok(new CategoryResponseDTO(categoryId));
     }
 
-
-
-
 }
