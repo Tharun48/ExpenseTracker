@@ -1,9 +1,6 @@
 package com.expense_tracker.Expense.Tracker.rest;
 
-import com.expense_tracker.Expense.Tracker.model.UserDetails;
-import com.expense_tracker.Expense.Tracker.model.UserDetailsResponseDTO;
-import com.expense_tracker.Expense.Tracker.model.UserRequestDTO;
-import com.expense_tracker.Expense.Tracker.model.UserResponseDTO;
+import com.expense_tracker.Expense.Tracker.model.*;
 import com.expense_tracker.Expense.Tracker.service.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +57,13 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/user/login/{email}/{password}")
-    public ResponseEntity<UserResponseDTO> loginUser(@PathVariable String email,@PathVariable String password) {
-        return ResponseEntity.ok(new UserResponseDTO(1));
+    @GetMapping("/user/login")
+    public ResponseEntity<JWTTokenDTO> loginUser() {
+        return ResponseEntity.ok(new JWTTokenDTO("token"));
     }
+
+
+
 
 
 }

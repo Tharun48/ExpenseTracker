@@ -1,9 +1,6 @@
 package com.expense_tracker.Expense.Tracker.rest;
 
-import com.expense_tracker.Expense.Tracker.model.UserDetails;
-import com.expense_tracker.Expense.Tracker.model.UserDetailsResponseDTO;
-import com.expense_tracker.Expense.Tracker.model.UserRequestDTO;
-import com.expense_tracker.Expense.Tracker.model.UserResponseDTO;
+import com.expense_tracker.Expense.Tracker.model.*;
 import com.expense_tracker.Expense.Tracker.service.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,7 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(User user, ModelMapper modelMapper, @Qualifier("BCryptPasswordEncoder") PasswordEncoder passwordEncoder) {
+    public UserController(User user, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.user = user;
         this.modelMapper=modelMapper;
         this.passwordEncoder=passwordEncoder;
@@ -61,9 +58,12 @@ public class UserController {
     }
 
     @GetMapping("/user/login/{email}/{password}")
-    public ResponseEntity<UserResponseDTO> loginUser(@PathVariable String email,@PathVariable String password) {
-        return ResponseEntity.ok(new UserResponseDTO(1));
+    public ResponseEntity<JWTTokenDTO> loginUser(@PathVariable String email,@PathVariable String password) {
+        return ResponseEntity.ok(new JWTTokenDTO("token"));
     }
+
+
+
 
 
 }

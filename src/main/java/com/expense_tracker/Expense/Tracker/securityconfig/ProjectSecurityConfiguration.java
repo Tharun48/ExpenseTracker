@@ -1,5 +1,7 @@
 package com.expense_tracker.Expense.Tracker.securityconfig;
 
+import com.expense_tracker.Expense.Tracker.filter.JwtTokenGenerator;
+import com.expense_tracker.Expense.Tracker.filter.JwtTokenValidator;
 import com.expense_tracker.Expense.Tracker.filter.RequestValidationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,11 +30,14 @@ public class ProjectSecurityConfiguration {
         http.
                 csrf(csrf -> csrf.disable())
                 .addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenGenerator(),BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(request->request
                 .requestMatchers(HttpMethod.POST,"/user","/error").permitAll()
                 .requestMatchers(HttpMethod.GET,"/user/**").authenticated()
                 .requestMatchers(HttpMethod.PUT,"/user/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE,"/user/**").authenticated()
+                .requestMatchers(HttpMethod.GET,"/user/login/**").authenticated()
                 .requestMatchers("/transaction/**","/category/**").authenticated()
         );
         http.formLogin(withDefaults()); //disable form login if your application is stateless
