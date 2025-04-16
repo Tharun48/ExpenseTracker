@@ -37,7 +37,7 @@ public class ProjectSecurityConfiguration {
                 .requestMatchers(HttpMethod.GET,"/user/**").authenticated()
                 .requestMatchers(HttpMethod.PUT,"/user/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE,"/user/**").authenticated()
-                .requestMatchers(HttpMethod.GET,"/users/{userId}/savings/compare").authenticated()
+                .requestMatchers(HttpMethod.GET,"/user/{userId}/savings/compare").authenticated()
                 .requestMatchers(HttpMethod.GET,"/user/login/**").authenticated()
                 .requestMatchers("/transaction/**","/category/**").authenticated()
         );

@@ -27,9 +27,12 @@ import java.util.stream.Collectors;
 public class JwtTokenValidator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String header = request.getHeader("Authorization");
+        if (header != null) {
+
+        }
         try{
             String key = "expenseTrackerKey-JWT-HMAC-SHA-algorithm requries 256 bit key";
-            String header = request.getHeader("Authorization");
             SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
             Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(header).getPayload();
             String username = claims.get("username").toString();
@@ -48,6 +51,6 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/user/login");
+        return request.getServletPath().equals("/user/login") || request.getServletPath().equals("/user");
     }
 }

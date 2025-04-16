@@ -65,8 +65,6 @@ public class TransactionController {
         return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
     }
 
-
-//    request url has to be changed
     @GetMapping("/transaction/saving/{userId}")
     public ResponseEntity<SavingsResponseDTO> getSavings(
             @PathVariable int userId,
@@ -76,8 +74,10 @@ public class TransactionController {
         return ResponseEntity.ok(savingsResponseDTO);
     }
 
+    @GetMapping("/transaction/saving/{userId}/{monthYear}/{firstMonth}/{secondMonth})")
+    public ResponseEntity<SavingsResponseDTO> compareExpenses(
 
-
+    )
 
 
 
