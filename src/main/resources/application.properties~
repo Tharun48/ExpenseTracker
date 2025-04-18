@@ -1,6 +1,6 @@
 spring.application.name=Expense-Tracker
 spring.config.import=application_test.properties
-spring.profiles.active=default
+spring.profiles.active=test
 #databse connectivity
 spring.datasource.url=jdbc:postgresql://localhost:5432/springboot
 spring.datasource.username=postgres

@@ -1,0 +1,4 @@
+package com.expense_tracker.Expense.Tracker.model;
+
+public record ResponseMessage(String message) {
+}

@@ -34,6 +34,7 @@ public class ProjectSecurityConfiguration {
                 .addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(request->request
                 .requestMatchers(HttpMethod.POST,"/user","/error").permitAll()
+                .requestMatchers(HttpMethod.GET,"/otp/**").permitAll()
                 .requestMatchers(HttpMethod.GET,"/user/**").authenticated()
                 .requestMatchers(HttpMethod.PUT,"/user/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE,"/user/**").authenticated()
