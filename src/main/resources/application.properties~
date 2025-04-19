@@ -9,3 +9,12 @@ spring.jpa.show-sql=${JPA_SHOW_SQL:true}
 spring.jpa.properties.hibernate.format_sql=${HIBERNATE_FORMAT_SQL:true}
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
+
+springdoc.swagger-ui.path=/swagger-ui
+springdoc.api-docs.enabled=true
+springdoc.swagger-ui.enabled=true
+
+
+twilio.account.sid=AC833e7dfa4919f9a5fab44a91fac82b0f
+twilio.auth.token=5d859ecc5cf8838443483701d57dfe1c
+twilio.phone.number=+17246473081

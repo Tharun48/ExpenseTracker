@@ -33,7 +33,8 @@ public class ProjectSecurityConfiguration {
                 .addFilterAfter(new JwtTokenGenerator(),BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(request->request
-                .requestMatchers(HttpMethod.POST,"/user","/error").permitAll()
+                .requestMatchers(HttpMethod.POST,"/user").permitAll()
+                .requestMatchers("/error","/swagger-ui/**","/v3/api-docs/**","/swagger-ui/index.html","/favicon.ico","/swagger-ui.html").permitAll()
                 .requestMatchers(HttpMethod.GET,"/otp/**").permitAll()
                 .requestMatchers(HttpMethod.GET,"/user/**").authenticated()
                 .requestMatchers(HttpMethod.PUT,"/user/**").authenticated()

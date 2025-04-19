@@ -20,7 +20,8 @@ public class OTPController {
     @GetMapping("otp/generate/{phoneNumber}")
     public ResponseEntity<ResponseMessage> generateOtp(@PathVariable String phoneNumber) {
         String otp = otpService.generateOTP(phoneNumber);
-        otpService.saveOTP(phoneNumber, otp);
+        if(otp!="-1")
+            otpService.saveOTP(phoneNumber, otp);
         otpService.sendOTP(phoneNumber, otp);
         return ResponseEntity.ok(new ResponseMessage("otp generated"));
     }

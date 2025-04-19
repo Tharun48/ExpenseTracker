@@ -28,8 +28,10 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
-        if (header != null) {
-
+        String path = request.getServletPath();
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.startsWith("/favicon.ico")) {
+            filterChain.doFilter(request, response);
+            return;
         }
         try{
             String key = "expenseTrackerKey-JWT-HMAC-SHA-algorithm requries 256 bit key";

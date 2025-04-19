@@ -17,4 +17,13 @@ public class ExceptionHandler {
         return new ResponseEntity<>(exceptionHandlerResponse, HttpStatus.NOT_FOUND);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler
+    public ResponseEntity<ExceptionHandlerResponse> exceptionHandler(BadRequestException e) {
+        ExceptionHandlerResponse exceptionHandlerResponse =  new ExceptionHandlerResponse();
+        exceptionHandlerResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        exceptionHandlerResponse.setMessage(e.getMessage());
+        exceptionHandlerResponse.setTimestamp(System.currentTimeMillis());
+        return new ResponseEntity<>(exceptionHandlerResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
