@@ -1,9 +1,15 @@
 package com.expense_tracker.Expense.Tracker.exceptionhandler;
 
 import com.expense_tracker.Expense.Tracker.model.ExceptionHandlerResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.autoconfigure.batch.BatchTaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class ExceptionHandler {
@@ -24,6 +30,22 @@ public class ExceptionHandler {
         exceptionHandlerResponse.setMessage(e.getMessage());
         exceptionHandlerResponse.setTimestamp(System.currentTimeMillis());
         return new ResponseEntity<>(exceptionHandlerResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler
+    public ResponseEntity<?> handleException(HttpServletRequest request, Exception ex) {
+        String path = request.getRequestURI();
+
+        // Skip handling Swagger/OpenAPI requests
+        if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
+            throw new RuntimeException(ex); // rethrow so Spring can handle it
+        }
+
+        // Your custom error response
+        Map<String, Object> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+        error.put("timestamp", new Date());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
 }

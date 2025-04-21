@@ -23,9 +23,7 @@ public class OTPController {
         if(otp!="-1")
             otpService.saveOTP(phoneNumber, otp);
         otpService.sendOTP(phoneNumber, otp);
-        if(otp!="-1")
-            return ResponseEntity.ok(new ResponseMessage("otp generated"));
-        return ResponseEntity.ok(new ResponseMessage("otp failed to generated"));
+        return ResponseEntity.ok(new ResponseMessage("otp generated"));
     }
 
 

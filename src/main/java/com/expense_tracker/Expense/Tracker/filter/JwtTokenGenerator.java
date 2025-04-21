@@ -37,6 +37,7 @@ public class JwtTokenGenerator extends OncePerRequestFilter {
                 .signWith(secretKey).compact();
         response.setHeader("Authorization", jwt);
         filterChain.doFilter(request,response);
+
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return !request.getServletPath().equals("/user/login");

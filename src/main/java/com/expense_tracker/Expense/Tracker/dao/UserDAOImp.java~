@@ -24,7 +24,7 @@ public class UserDAOImp implements UserDAO{
         authorities.setAuthority("READ");
         authorities.addUser(userDetails);
         Authorities authorities1 = entityManager.merge(authorities);
-        userDetails.addAuthorities(authorities);
+        userDetails.addAuthorities(authorities1);
         return userDetails.getUserId();
     }
 

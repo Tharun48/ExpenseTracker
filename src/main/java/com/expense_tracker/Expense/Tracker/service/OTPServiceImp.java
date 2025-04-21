@@ -51,9 +51,9 @@ public class OTPServiceImp implements OTPService{
         if(otp.equals("-1")) {
             OTPExpirationDetails otpExpirationDetails=otpDetails.get(toPhoneNumber);
             OTPExpirationDetails otpExpirationDetails1=new OTPExpirationDetails("",null,0,null,new Date(new Date().getTime()+60000));
-            otpDetails.put(toPhoneNumber,otpExpirationDetails1);
             long diffInMillis = otpDetails.get(toPhoneNumber).accountLockedTill().getTime()-new Date().getTime() ;
             long diffInMinutes = (long) Math.ceil(diffInMillis / (60.0 * 1000));
+            otpDetails.put(toPhoneNumber,otpExpirationDetails1);
             Message.creator(
                     new PhoneNumber(toPhoneNumber),
                     new PhoneNumber(fromNumber),
@@ -107,7 +107,7 @@ public class OTPServiceImp implements OTPService{
         } else {
             OTPExpirationDetails otpExpirationDetails = otpDetails.get(phoneNumber);
             Date accountLockedTill=null;
-            if(otpExpirationDetails.countOfFailureAttempts()==2) {
+            if(otpExpirationDetails.countOfFailureAttempts()==3) {
                 accountLockedTill=new Date(new Date().getTime()+600000);
             }
             OTPExpirationDetails otpExpirationDetails1 = new OTPExpirationDetails("",null,otpExpirationDetails.countOfFailureAttempts()+1,null,accountLockedTill);

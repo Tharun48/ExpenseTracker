@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("test")
 public class ExpenseTrackerAuthenticationProvider implements AuthenticationProvider {
 
     ExpenseTrackerUserDetailsService expenseTrackerUserDetailsService;
@@ -30,6 +29,9 @@ public class ExpenseTrackerAuthenticationProvider implements AuthenticationProvi
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         UserDetails userDetails = expenseTrackerUserDetailsService.loadUserByUsername(username);
+        if(!passwordEncoder.matches(password,userDetails.getPassword())){
+            throw new BadCredentialsException("Invalid password");
+        }
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
     }
 

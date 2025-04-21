@@ -1,8 +1,10 @@
 package com.expense_tracker.Expense.Tracker.dao;
 
+import com.expense_tracker.Expense.Tracker.exceptionhandler.BadRequestException;
 import com.expense_tracker.Expense.Tracker.model.Authorities;
 import com.expense_tracker.Expense.Tracker.model.UserDetails;
 import com.expense_tracker.Expense.Tracker.repository.UserRepository;
+import com.expense_tracker.Expense.Tracker.service.User;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,12 @@ public class UserDAOImp implements UserDAO{
 
     @Override
     public int saveUserDAO(UserDetails user) {
+
+        UserDetails userExsists= userRepository.findByUserName(user.getUserName());
+        if(userExsists!=null){
+            throw new BadRequestException("User already exsits with user-name " + user.getUserName());
+        }
+
         UserDetails userDetails= entityManager.merge(user);
         Authorities authorities = new Authorities();
         authorities.setAuthority("READ");

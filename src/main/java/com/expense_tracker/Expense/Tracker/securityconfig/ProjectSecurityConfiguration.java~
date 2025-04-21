@@ -51,7 +51,7 @@ public class ProjectSecurityConfiguration {
                         .logoutSuccessUrl("/swagger-ui/index.html")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID").permitAll()
-                );
+                )
 
 
         http.formLogin(withDefaults()); //disable form login if your application is stateless
