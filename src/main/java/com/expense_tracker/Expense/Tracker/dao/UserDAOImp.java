@@ -26,13 +26,14 @@ public class UserDAOImp implements UserDAO{
         if(userExsists!=null){
             throw new BadRequestException("User already exsits with user-name " + user.getUserName());
         }
-
         UserDetails userDetails= entityManager.merge(user);
+        /*
         Authorities authorities = new Authorities();
         authorities.setAuthority("READ");
         authorities.addUser(userDetails);
         Authorities authorities1 = entityManager.merge(authorities);
         userDetails.addAuthorities(authorities1);
+         */
         return userDetails.getUserId();
     }
 

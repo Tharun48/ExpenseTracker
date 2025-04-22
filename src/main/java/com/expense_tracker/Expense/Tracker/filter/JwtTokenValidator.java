@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker.filter;
 
+import com.expense_tracker.Expense.Tracker.model.ApplicationConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -34,16 +35,11 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             return;
         }
         try{
-            String key = "expenseTrackerKey-JWT-HMAC-SHA-algorithm requries 256 bit key";
+            String key = ApplicationConstants.key;
             SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
             Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(header).getPayload();
             String username = claims.get("username").toString();
-            String roles = claims.get("roles").toString();
             List<GrantedAuthority> authorities = new ArrayList<>();
-            String[] rolesArray = roles.split(",");
-            for(String role : rolesArray) {
-                authorities.add(new SimpleGrantedAuthority(role));
-            }
             Authentication authentication=new UsernamePasswordAuthenticationToken(username,"",authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -54,6 +50,6 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return request.getServletPath().equals("/user/login") || request.getServletPath().equals("/user") || request.getServletPath().startsWith("/otp/");
+        return request.getServletPath().equals("/user/login") || request.getServletPath().equals("/user/register") || request.getServletPath().startsWith("/otp/");
     }
 }

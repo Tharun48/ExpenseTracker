@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker.filter;
 
+import com.expense_tracker.Expense.Tracker.model.ApplicationConstants;
 import com.expense_tracker.Expense.Tracker.model.Authorities;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -20,18 +21,13 @@ import java.util.Date;
 public class JwtTokenGenerator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String key = "expenseTrackerKey-JWT-HMAC-SHA-algorithm requries 256 bit key";
+        String key = ApplicationConstants.key;
         SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        StringBuilder authorities = new StringBuilder("READ");
-        for(GrantedAuthority authority : authentication.getAuthorities()) {
-            authorities.append(",").append(authority.getAuthority());
-        }
         String jwt = Jwts.builder()
                 .issuer("Expense Tracker")
                 .subject("jwt tokens")
                 .claim("username", authentication.getName())
-                .claim("roles", authorities.toString())
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime() + 6000000))
                 .signWith(secretKey).compact();
