@@ -34,7 +34,6 @@ public class ProjectSecurityConfiguration {
         http.
                 csrf(csrf -> csrf.disable())
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .addFilterAfter(new JwtTokenGenerator(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(request->request
                 .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST,"/user/login").permitAll()
