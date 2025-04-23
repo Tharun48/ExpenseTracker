@@ -3,6 +3,9 @@ package com.expense_tracker.Expense.Tracker.rest;
 import com.expense_tracker.Expense.Tracker.model.*;
 import com.expense_tracker.Expense.Tracker.service.TransactionDetails;
 import com.expense_tracker.Expense.Tracker.service.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@Tag(name="transaction")
 public class TransactionController {
 
     TransactionDetails transactionDetails;
@@ -27,7 +31,12 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionResponseDTO> saveTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+    @Operation(
+            summary = "Add a new transaction",
+            description = "add new transaction based on category like income(1) or expense(2)",
+            security = @SecurityRequirement(name = "BearerAuthentication")
+    )
+    public ResponseEntity<TransactionResponseDTO> saveTransaction(@RequestBody TransactionAddRequestDTO transactionRequestDTO) {
         UserDetails userDetails = user.getUser(transactionRequestDTO.userId());
         Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails);
         transaction.addUser(userDetails);
@@ -36,6 +45,11 @@ public class TransactionController {
     }
 
     @PutMapping("/transaction")
+    @Operation(
+            summary = "Modify Existing transaction",
+            description = "This api is used to add a modify transaction",
+            security = @SecurityRequirement(name = "BearerAuthentication")
+    )
     public ResponseEntity<TransactionResponseDTO> modifyTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
         UserDetails userDetails = user.getUser(transactionRequestDTO.userId());
         Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails);
@@ -46,6 +60,11 @@ public class TransactionController {
     }
 
     @GetMapping("/transaction/{transactionId}")
+    @Operation(
+            summary = "Get transaction details",
+            description = "This api is used to get transaction details by providing transactionId",
+            security = @SecurityRequirement(name = "BearerAuthentication")
+    )
     public ResponseEntity<TransactionDetailsResponseDTO> getTransaction(@PathVariable int transactionId) {
         Transaction transaction = transactionDetails.getTransaction(transactionId);
         TransactionDetailsResponseDTO transactionDetailsResponseDTO = new TransactionDetailsResponseDTO(
@@ -60,12 +79,23 @@ public class TransactionController {
     }
 
     @DeleteMapping("/transaction/{transactionId}")
+    @Operation(
+            summary = "Delete transaction",
+            description = "This api is used to delete a transaction",
+            security = @SecurityRequirement(name = "BearerAuthentication")
+    )
     public ResponseEntity<TransactionResponseDTO> deleteTransaction(@PathVariable int transactionId) {
         transactionDetails.deleteTransaction(transactionId);
         return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
     }
 
+
     @GetMapping("/transaction/saving/{userId}")
+    @Operation(
+            summary = "Get savings",
+            description = "This api is get transaction details from specific date to specific date",
+            security = @SecurityRequirement(name = "BearerAuthentication")
+    )
     public ResponseEntity<SavingsResponseDTO> getSavings(
             @PathVariable int userId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
@@ -74,10 +104,8 @@ public class TransactionController {
         return ResponseEntity.ok(savingsResponseDTO);
     }
 
-    @GetMapping("/transaction/saving/{userId}/{monthYear}/{firstMonth}/{secondMonth})")
-    public ResponseEntity<SavingsResponseDTO> compareExpenses(
 
-    )
+
 
 
 

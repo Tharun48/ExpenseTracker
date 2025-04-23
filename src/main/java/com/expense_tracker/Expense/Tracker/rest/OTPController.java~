@@ -1,14 +1,20 @@
 package com.expense_tracker.Expense.Tracker.rest;
 
+import com.expense_tracker.Expense.Tracker.model.OtpVerificationDTO;
 import com.expense_tracker.Expense.Tracker.model.ResponseMessage;
 import com.expense_tracker.Expense.Tracker.service.OTPService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name="one-time-password")
 public class OTPController {
 
     OTPService otpService;
@@ -18,17 +24,29 @@ public class OTPController {
     }
 
     @GetMapping("otp/generate/{phoneNumber}")
+    @Operation(
+            summary = "Generate OTP",
+            description = "This api is used to generate one-time-password"
+    )
     public ResponseEntity<ResponseMessage> generateOtp(@PathVariable String phoneNumber) {
         String otp = otpService.generateOTP(phoneNumber);
         if(otp!="-1")
             otpService.saveOTP(phoneNumber, otp);
         otpService.sendOTP(phoneNumber, otp);
-        return ResponseEntity.ok(new ResponseMessage("otp generated"));
+        if(otp!="-1")
+            return ResponseEntity.ok(new ResponseMessage("otp generated"));
+        return ResponseEntity.ok(new ResponseMessage("otp failed to generated"));
     }
 
 
     @GetMapping("otp/verify/{phoneNumber}/{otp}")
-    public ResponseEntity<ResponseMessage> verifyOtp(@PathVariable String phoneNumber,@PathVariable String otp) {
+    @Operation(
+            summary = "Verify OTP",
+            description = "This api is verify the generated one-time-password"
+    )
+    public ResponseEntity<ResponseMessage> verifyOtp(@RequestBody OtpVerificationDTO otpVerificationDTO) {
+        String phoneNumber=otpVerificationDTO.phoneNumber();
+        String otp=otpVerificationDTO.otp();
         if(!otpService.verifyOTP(phoneNumber, otp)){
             return ResponseEntity.ok(new ResponseMessage("otp verification failed"));
         }

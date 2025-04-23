@@ -33,16 +33,13 @@ public class ProjectSecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.
                 csrf(csrf -> csrf.disable())
+                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(request->request
                 .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST,"/user/login").permitAll()
                 .requestMatchers("/error","/swagger-ui/**","/v3/api-docs/**","/swagger-ui/index.html","/favicon.ico","/swagger-ui.html").permitAll()
-                .requestMatchers(HttpMethod.GET,"/otp/**").permitAll()
-                .requestMatchers(HttpMethod.GET,"/user/**").authenticated()
-                .requestMatchers(HttpMethod.PUT,"/user/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE,"/user/**").authenticated()
-                .requestMatchers(HttpMethod.GET,"/users/{userId}/savings/compare").authenticated()
-                .requestMatchers("/transaction/**","/category/**").authenticated()
+                .requestMatchers("/otp/**").permitAll()
+                .anyRequest().authenticated()
         );
 
         http.logout(logout-> logout

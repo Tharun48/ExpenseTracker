@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker;
 
+import jdk.jshell.SourceCodeAnalysis;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.springframework.boot.SpringApplication;
@@ -20,4 +21,5 @@ public class ExpenseTrackerApplication {
 				.setSkipNullEnabled(true);
 		return modelMapper;
 	}
+
 }

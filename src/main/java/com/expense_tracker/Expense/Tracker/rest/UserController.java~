@@ -108,7 +108,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     @Operation(
-            summary = "Get the Bearer token",
+            summary = "Get the token",
             description = "This api is used to get the JWToken for authentication by providing the valid credentials"
     )
     public ResponseEntity<JWTTokenDTO> loginUser(@RequestBody JWTTokenRequestDTO jwtTokenRequestDTO) {
