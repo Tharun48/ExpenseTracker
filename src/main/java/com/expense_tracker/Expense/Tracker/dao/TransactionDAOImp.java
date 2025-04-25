@@ -25,7 +25,9 @@ public class TransactionDAOImp implements TransactionDAO{
 
     @Override
     public int saveTransactionDAO(Transaction transaction) {
-        transaction.setCreatedOn(LocalDate.now());
+        if(transaction.getCreatedOn()==null){
+            transaction.setCreatedOn(LocalDate.now());
+        }
         transaction.setTransactionAmount(Math.abs(transaction.getTransactionAmount()));
         Transaction transaction1 = entityManager.merge(transaction);
         return transaction1.getTransactionId();
@@ -68,5 +70,10 @@ public class TransactionDAOImp implements TransactionDAO{
             return transactionRepository.getTransactionFromDate(userId,fromDate);
         }
         return transactionRepository.getTransactionToDate(userId,toDate);
+    }
+
+    @Override
+    public List<Transaction> getTransactionUser(int userId) {
+        return transactionRepository.getALlTransaction(userId);
     }
 }

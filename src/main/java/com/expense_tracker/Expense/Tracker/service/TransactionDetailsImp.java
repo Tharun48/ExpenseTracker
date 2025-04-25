@@ -26,6 +26,9 @@ public class TransactionDetailsImp implements TransactionDetails{
     @Override
     @Transactional
     public int saveTransaction(Transaction transaction) {
+        if(transaction.getTransactionCategory()!=1 && transaction.getTransactionCategory()!=2) {
+            throw new IllegalArgumentException("Invalid transaction category "+ transaction.getTransactionCategory() + " category should be 1 or 2");
+        }
         return transactionDAO.saveTransactionDAO(transaction);
     }
 
@@ -67,6 +70,17 @@ public class TransactionDetailsImp implements TransactionDetails{
             }
         }
         return new SavingsResponseDTO(totalSavings,map);
+    }
+
+    @Override
+    public List<Transaction> getTransactionUser(int userId) {
+        return transactionDAO.getTransactionUser(userId);
+    }
+
+    @Override
+    public List<Transaction> getTransactionWithDate(int userId, LocalDate fromDate, LocalDate toDate) {
+        userDAO.getUserDAO(userId);
+        return transactionDAO.savings(userId,fromDate,toDate);
     }
 
 

@@ -131,25 +131,4 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).header("token",token).body(new JWTTokenDTO(token));
     }
 
-    @GetMapping("/users/{userId}/savings/compare")
-    @Operation(
-            summary = "Compare monthly savings",
-            description = "This api is used to compare monthly savings by providing the start and end dates of both the months",
-            security = @SecurityRequirement(name = "BearerAuthentication")
-    )
-    public ResponseEntity<CompareMonthlySavingsDTO> compareMonthlySavings(
-            @PathVariable int userId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate firstMonthStart, // Format: YYYY-MM
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate firstMonthEnd,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate secondMonthStart, // Format: YYYY-MM
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate secondMonthEnd
-    ) {
-        CompareMonthlySavingsDTO compareMonthlySavingsDTO = user.comparingMonthlySavingsDTO(userId,firstMonthStart,firstMonthEnd,secondMonthStart,secondMonthEnd);
-        return ResponseEntity.ok(compareMonthlySavingsDTO);
-    }
-
-
-
-
-
 }

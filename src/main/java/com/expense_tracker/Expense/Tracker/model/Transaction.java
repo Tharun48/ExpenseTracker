@@ -38,11 +38,12 @@ public class Transaction {
 
     public Transaction() {}
 
-    public Transaction(int transactionCategory, String description, double transactionAmount, UserDetails user_transaction_id) {
+    public Transaction(int transactionCategory, String description, double transactionAmount, UserDetails user_transaction_id, LocalDate createdOn) {
         this.transactionCategory = transactionCategory;
         this.description = description;
         this.transactionAmount = transactionAmount;
         this.user_transaction_id = user_transaction_id;
+        this.createdOn=createdOn;
     }
 
     public int getTransactionId() {

@@ -10,8 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@Tag(name="category")
 public class CategoryController {
 
     CategoryDetails categoryDetails;

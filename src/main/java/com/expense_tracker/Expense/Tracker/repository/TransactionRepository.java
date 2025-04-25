@@ -27,4 +27,5 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
     @Query("SELECT t FROM Transaction t WHERE t.user_transaction_id.userId = :userId")
     List<Transaction> getALlTransaction(@Param("userId") int userId);
 
+
 }

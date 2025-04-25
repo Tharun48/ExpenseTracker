@@ -124,7 +124,7 @@ public class UserDetails {
     }
 
 
-    @OneToMany(mappedBy = "user_transaction_id")
+    @OneToMany(mappedBy = "user_transaction_id",fetch = FetchType.LAZY)
     private List<Transaction> transactionList;
 
     @OneToMany(mappedBy = "user_category")

@@ -12,5 +12,4 @@ public interface TransactionDAO {
     int modifyTransactionDetailsDAO(Transaction transaction);
     int deleteTransactionDAO(int transactionId);
     List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate);
-    List<Transaction> getTransactionUser(int userId);
 }

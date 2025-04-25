@@ -1,11 +1,20 @@
 package com.expense_tracker.Expense.Tracker;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import jdk.jshell.SourceCodeAnalysis;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+@OpenAPIDefinition(
+		info = @Info(
+				title = "Expense-Tracker",
+				version = "2.0.0",
+				description = "APIs for saving and querying daily transactions by amount spent"
+		)
+)
 @SpringBootApplication
 public class ExpenseTrackerApplication {
 

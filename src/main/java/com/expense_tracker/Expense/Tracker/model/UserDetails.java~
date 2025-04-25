@@ -117,7 +117,7 @@ public class UserDetails {
     }
 
     public void addAuthorities(Authorities authorities) {
-        if(authoritiesList.isEmpty()) {
+        if(authoritiesList==null) {
             authoritiesList = new ArrayList<>();
         }
         authoritiesList.add(authorities);

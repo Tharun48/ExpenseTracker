@@ -15,7 +15,7 @@ public class Transaction {
     @Column(name="transaction_id")
     private int transactionId;
 
-    @Column(name="date")
+    @Column(name="transaction_date")
     private LocalDate createdOn;
 
     @Column(name="transaction_category")

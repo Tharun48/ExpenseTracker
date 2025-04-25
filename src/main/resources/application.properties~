@@ -13,9 +13,9 @@ springdoc.swagger-ui.path=/swagger-ui
 #springdoc.swagger-ui.enabled=true
 server.port=5000
 
-twilio.account.sid=AC833e7dfa4919f9a5fab44a91fac82b0f
-twilio.auth.token=5a0a367458afe73a2de48023d72aa5af
-twilio.phone.number=+17246473081
+#twilio.account.sid=AC833e7dfa4919f9a5fab44a91fac82b0f
+#twilio.auth.token=5a0a367458afe73a2de48023d72aa5af
+#twilio.phone.number=+17246473081
 
 #twilio.account.sid=${TWILIO_ACCOUNT_SID}
 #twilio.auth.token=${TWILIO_AUTH_TOKEN}

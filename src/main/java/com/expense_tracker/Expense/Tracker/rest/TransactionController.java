@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,7 +40,7 @@ public class TransactionController {
     )
     public ResponseEntity<TransactionResponseDTO> saveTransaction(@RequestBody TransactionAddRequestDTO transactionRequestDTO) {
         UserDetails userDetails = user.getUser(transactionRequestDTO.userId());
-        Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails);
+        Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails,transactionRequestDTO.createdOn());
         transaction.addUser(userDetails);
         int transactionId = transactionDetails.saveTransaction(transaction);
         return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
@@ -52,31 +54,13 @@ public class TransactionController {
     )
     public ResponseEntity<TransactionResponseDTO> modifyTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
         UserDetails userDetails = user.getUser(transactionRequestDTO.userId());
-        Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails);
+        Transaction transaction = new Transaction(transactionRequestDTO.transactionCategory(),transactionRequestDTO.description(),transactionRequestDTO.transactionAmount(),userDetails,transactionRequestDTO.createdOn());
         transaction.setUser_transaction_id(userDetails);
         transaction.setTransactionId(transactionRequestDTO.transactionId());
         int transactionId = transactionDetails.modifyTransactionDetails(transaction);
         return ResponseEntity.ok(new TransactionResponseDTO(transactionId));
     }
 
-    @GetMapping("/transaction/{transactionId}")
-    @Operation(
-            summary = "Get transaction details",
-            description = "This api is used to get transaction details by providing transactionId",
-            security = @SecurityRequirement(name = "BearerAuthentication")
-    )
-    public ResponseEntity<TransactionDetailsResponseDTO> getTransaction(@PathVariable int transactionId) {
-        Transaction transaction = transactionDetails.getTransaction(transactionId);
-        TransactionDetailsResponseDTO transactionDetailsResponseDTO = new TransactionDetailsResponseDTO(
-                transaction.getTransactionId(),
-                transaction.getUser_transaction_id().getUserId(),
-                transaction.getTransactionAmount(),
-                transaction.getDescription(),
-                transaction.getTransactionCategory(),
-                transaction.getCreatedOn()
-        );
-        return ResponseEntity.ok(transactionDetailsResponseDTO);
-    }
 
     @DeleteMapping("/transaction/{transactionId}")
     @Operation(
@@ -90,24 +74,22 @@ public class TransactionController {
     }
 
 
-    @GetMapping("/transaction/saving/{userId}")
+    @GetMapping("/transaction/user/{userId}")
     @Operation(
-            summary = "Get savings",
-            description = "This api is get transaction details from specific date to specific date",
+            summary = "Get transaction details",
+            description = "This api is get transaction details for a specific user",
             security = @SecurityRequirement(name = "BearerAuthentication")
     )
-    public ResponseEntity<SavingsResponseDTO> getSavings(
-            @PathVariable int userId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
-        SavingsResponseDTO savingsResponseDTO = transactionDetails.savings(userId,fromDate,toDate);
-        return ResponseEntity.ok(savingsResponseDTO);
+    public ResponseEntity<List<TransactionRequestDTO>> getTransaction(@PathVariable int userId) {
+        List<Transaction> transactions = transactionDetails.getTransactionUser(userId);
+        List<TransactionRequestDTO> list = new ArrayList<>();
+        for(Transaction transaction:transactions){
+            TransactionRequestDTO transactionRequestDTO =new TransactionRequestDTO(transaction.getTransactionId(),
+                    transaction.getTransactionAmount(), transaction.getDescription(),transaction.getCreatedOn(),
+                    transaction.getTransactionCategory(),transaction.getUser_transaction_id().getUserId());
+            list.add(transactionRequestDTO);
+        }
+        return ResponseEntity.ok(list);
     }
-
-
-
-
-
-
 
 }

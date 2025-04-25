@@ -13,5 +13,4 @@ public interface TransactionDetails {
     int deleteTransaction(int transactionId);
     SavingsResponseDTO savings(int userId, LocalDate fromDate, LocalDate toDate);
     List<Transaction> getTransactionUser(int userId);
-    List<Transaction> getTransactionWithDate(int userId, LocalDate fromDate, LocalDate toDate);
 }

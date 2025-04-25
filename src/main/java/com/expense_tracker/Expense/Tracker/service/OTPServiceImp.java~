@@ -107,7 +107,7 @@ public class OTPServiceImp implements OTPService{
         } else {
             OTPExpirationDetails otpExpirationDetails = otpDetails.get(phoneNumber);
             Date accountLockedTill=null;
-            if(otpExpirationDetails.countOfFailureAttempts()>=2) {
+            if(otpExpirationDetails.countOfFailureAttempts()==2) {
                 accountLockedTill=new Date(new Date().getTime()+600000);
             }
             OTPExpirationDetails otpExpirationDetails1 = new OTPExpirationDetails("",null,otpExpirationDetails.countOfFailureAttempts()+1,null,accountLockedTill);

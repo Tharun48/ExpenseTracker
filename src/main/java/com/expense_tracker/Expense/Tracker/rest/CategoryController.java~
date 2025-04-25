@@ -5,11 +5,13 @@ import com.expense_tracker.Expense.Tracker.service.CategoryDetails;
 import com.expense_tracker.Expense.Tracker.service.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name="category")
 public class CategoryController {
 
     CategoryDetails categoryDetails;

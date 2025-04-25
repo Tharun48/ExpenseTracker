@@ -22,9 +22,12 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
     List<Transaction> getTransactionFromDate(@Param("userId") int userId, @Param("fromDate") LocalDate fromDate);
 
     @Query("SELECT t FROM Transaction t WHERE t.user_transaction_id.userId = :userId AND t.createdOn <= :toDate")
-    List<Transaction> getTransactionToDate(@Param("userId") int userId, @Param("fromDate") LocalDate toDate);
+    List<Transaction> getTransactionToDate(@Param("userId") int userId, @Param("toDate") LocalDate toDate);
 
     @Query("SELECT t FROM Transaction t WHERE t.user_transaction_id.userId = :userId")
     List<Transaction> getALlTransaction(@Param("userId") int userId);
+
+    @Query("SELECT t FROM Transaction t  WHERE t.user_transaction_id.userId = :userId")
+    List<Transaction> getTransactionByUserId(int userId);
 
 }
