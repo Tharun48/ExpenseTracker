@@ -71,7 +71,7 @@ public class SavingsController {
     @GetMapping("/user/{userId}/spent-over/{amount}")
     @Operation(
             summary = "Get Amount spent over a particular limit",
-            description = "This api is get items spent over a particular limit",
+            description = "This api is to get items spent over a particular limit",
             security = @SecurityRequirement(name = "BearerAuthentication")
     )
     public ResponseEntity<List<AmountIndividuallySpentDTO>> getSavings(
@@ -83,16 +83,11 @@ public class SavingsController {
     {
 
         List<Transaction> transactionList = transactionDetails.getTransactionWithDate(userId,fromDate,toDate);
-        Map<String,Double> map = new HashMap<>();
-        for(Transaction transaction:transactionList){
-            String description = transaction.getDescription();
-            map.put(description,map.getOrDefault(description,0.0)+transaction.getTransactionAmount());
-        }
         List<AmountIndividuallySpentDTO> list = new ArrayList<>();
-        for(Map.Entry<String,Double> entry:map.entrySet()) {
-            if(entry.getValue()>amount){
-                list.add(new AmountIndividuallySpentDTO(entry.getKey(),entry.getValue()));
-            }
+
+        for(Transaction transaction : transactionList){
+            AmountIndividuallySpentDTO amountIndividuallySpentDTO = new AmountIndividuallySpentDTO(transaction.getDescription(),transaction.getTransactionAmount(),transaction.getCreatedOn());
+            list.add(amountIndividuallySpentDTO);
         }
         return ResponseEntity.ok(list);
     }

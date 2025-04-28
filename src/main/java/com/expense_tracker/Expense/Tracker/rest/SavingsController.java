@@ -83,16 +83,12 @@ public class SavingsController {
     {
 
         List<Transaction> transactionList = transactionDetails.getTransactionWithDate(userId,fromDate,toDate);
-        Map<String,Double> map = new HashMap<>();
-        for(Transaction transaction:transactionList){
-            String description = transaction.getDescription();
-            map.put(description,map.getOrDefault(description,0.0)+transaction.getTransactionAmount());
-        }
         List<AmountIndividuallySpentDTO> list = new ArrayList<>();
-        for(Map.Entry<String,Double> entry:map.entrySet()) {
-            if(entry.getValue()>amount){
-                list.add(new AmountIndividuallySpentDTO(entry.getKey(),entry.getValue()));
-            }
+
+        for(Transaction transaction : transactionList){
+            if(transaction.getTransactionCategory()==1) continue;
+            AmountIndividuallySpentDTO amountIndividuallySpentDTO = new AmountIndividuallySpentDTO(transaction.getDescription(),transaction.getTransactionAmount(),transaction.getCreatedOn());
+            list.add(amountIndividuallySpentDTO);
         }
         return ResponseEntity.ok(list);
     }

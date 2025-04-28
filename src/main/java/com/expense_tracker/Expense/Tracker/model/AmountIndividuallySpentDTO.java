@@ -1,4 +1,10 @@
 package com.expense_tracker.Expense.Tracker.model;
 
-public record AmountIndividuallySpentDTO(String item, double amount) {
+import java.time.LocalDate;
+
+public record AmountIndividuallySpentDTO(
+        String item,
+        double amount,
+        LocalDate transactionDate
+) {
 }
