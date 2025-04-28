@@ -13,4 +13,5 @@ public interface TransactionDAO {
     int deleteTransactionDAO(int transactionId);
     List<Transaction> savings(int userId, LocalDate fromDate, LocalDate toDate);
     List<Transaction> getTransactionUser(int userId);
+    List<Transaction> getTransactionBasedOnMonthAndYear(int userId,int year,int month);
 }

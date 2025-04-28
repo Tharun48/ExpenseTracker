@@ -28,4 +28,8 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
     List<Transaction> getALlTransaction(@Param("userId") int userId);
 
 
+    @Query("SELECT t FROM Transaction t WHERE t.user_transaction_id.userId = :userId AND YEAR(t.createdOn) = :year AND MONTH(t.createdOn) = :month AND t.transactionCategory = :category")
+    List<Transaction> getTransactionBasedOnMonthYear(@Param("userId") int userId,@Param("year") int year,@Param("month") int month,@Param("category") int transactionCategory);
+
+
 }

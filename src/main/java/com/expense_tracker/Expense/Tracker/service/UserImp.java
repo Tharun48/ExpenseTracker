@@ -51,13 +51,19 @@ public class UserImp implements User{
     }
 
     @Override
-    public CompareMonthlySavingsDTO comparingMonthlySavingsDTO(int userId, LocalDate firstMonthStart, LocalDate firstMonthEnd, LocalDate secondMonthStart, LocalDate secondMonthEnd) {
-        List<Transaction> firstMonth = transactionDAO.savings(userId,firstMonthStart,firstMonthEnd);
-        List<Transaction> secondMonth = transactionDAO.savings(userId,secondMonthStart,secondMonthEnd);
+    public CompareMonthlySavingsDTO comparingMonthlySavingsDTO(int userId, int firstYear, int firstMonth, int secondYear, int secondMonth) {
+
+        if(firstMonth<0||firstMonth>12||secondMonth<0||secondMonth>12)
+        {
+            throw new IllegalArgumentException("Month value is not valid");
+        }
+
+        List<Transaction> month1 = transactionDAO.getTransactionBasedOnMonthAndYear(userId,firstYear,firstMonth);
+        List<Transaction> month2 = transactionDAO.getTransactionBasedOnMonthAndYear(userId,secondYear,secondMonth);
         Map<String,double[]> map = new HashMap<>();
         List<List<Transaction>> transactionList = new ArrayList<>();
-        transactionList.add(firstMonth);
-        transactionList.add(secondMonth);
+        transactionList.add(month1);
+        transactionList.add(month2);
         int size = transactionList.size();
         for(int i=0;i<size;i++) {
             List<Transaction> transactions = transactionList.get(i);

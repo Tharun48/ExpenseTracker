@@ -76,4 +76,9 @@ public class TransactionDAOImp implements TransactionDAO{
     public List<Transaction> getTransactionUser(int userId) {
         return transactionRepository.getALlTransaction(userId);
     }
+
+    @Override
+    public List<Transaction> getTransactionBasedOnMonthAndYear(int userId, int year, int month) {
+        return transactionRepository.getTransactionBasedOnMonthYear(userId,year,month,2);
+    }
 }

@@ -10,6 +10,5 @@ public interface User {
     UserDetails getUser(int userId);
     int modifyUserDetails(UserDetails user);
     int deleteUser(int userId);
-    CompareMonthlySavingsDTO comparingMonthlySavingsDTO(int userId, LocalDate firstMonthStart,LocalDate firstMonthEnd,
-                                                        LocalDate secondMonthStart,LocalDate secondMonthEnd);
+    CompareMonthlySavingsDTO comparingMonthlySavingsDTO(int userId, int firstYear, int firstMonth, int secondYear, int secondMonth);
 }
