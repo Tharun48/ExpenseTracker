@@ -86,10 +86,14 @@ public class SavingsController {
         List<AmountIndividuallySpentDTO> list = new ArrayList<>();
 
         for(Transaction transaction : transactionList){
-            if(transaction.getTransactionCategory()==1) continue;
+            if(transaction.getTransactionCategory()==1 || transaction.getTransactionAmount()<=amount) continue;
             AmountIndividuallySpentDTO amountIndividuallySpentDTO = new AmountIndividuallySpentDTO(transaction.getDescription(),transaction.getTransactionAmount(),transaction.getCreatedOn());
             list.add(amountIndividuallySpentDTO);
         }
         return ResponseEntity.ok(list);
     }
+
+
+
+
 }

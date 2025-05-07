@@ -2,6 +2,7 @@ package com.expense_tracker.Expense.Tracker.rest;
 
 import com.expense_tracker.Expense.Tracker.model.*;
 import com.expense_tracker.Expense.Tracker.securityconfig.ExpenseTrackerUserDetailsService;
+import com.expense_tracker.Expense.Tracker.securityconfig.ProjectSecurityConfiguration;
 import com.expense_tracker.Expense.Tracker.service.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -44,13 +45,16 @@ public class UserController {
     private ModelMapper modelMapper;
     PasswordEncoder passwordEncoder;
     AuthenticationManager authenticationManager;
+    ExpenseTrackerUserDetailsService expenseTrackerUserDetailsService;
+    ProjectSecurityConfiguration projectSecurityConfiguration;
     @Autowired
     public UserController(User user, ModelMapper modelMapper, PasswordEncoder passwordEncoder,
-                          AuthenticationManager authenticationManager) {
+                          ExpenseTrackerUserDetailsService expenseTrackerUserDetailsService, ProjectSecurityConfiguration projectSecurityConfiguration) {
         this.user = user;
         this.modelMapper=modelMapper;
         this.passwordEncoder=passwordEncoder;
-        this.authenticationManager=authenticationManager;
+        this.projectSecurityConfiguration=projectSecurityConfiguration;
+        this.expenseTrackerUserDetailsService=expenseTrackerUserDetailsService;
     }
 
     @PostMapping("/user/register")
@@ -116,7 +120,7 @@ public class UserController {
         String userName =jwtTokenRequestDTO.userName();
         String password =jwtTokenRequestDTO.password();
         Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(userName, password);
-        Authentication authenticated = authenticationManager.authenticate(authentication);
+        Authentication authenticated = projectSecurityConfiguration.authenticationManager(expenseTrackerUserDetailsService,passwordEncoder).authenticate(authentication);
         String token="";
         if(authenticated.isAuthenticated()) {
             SecretKey secretKey= Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
@@ -130,26 +134,5 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.OK).header("token",token).body(new JWTTokenDTO(token));
     }
-
-    @GetMapping("/users/{userId}/savings/compare")
-    @Operation(
-            summary = "Compare monthly savings",
-            description = "This api is used to compare monthly savings by providing the start and end dates of both the months",
-            security = @SecurityRequirement(name = "BearerAuthentication")
-    )
-    public ResponseEntity<CompareMonthlySavingsDTO> compareMonthlySavings(
-            @PathVariable int userId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate firstMonthStart, // Format: YYYY-MM
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate firstMonthEnd,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate secondMonthStart, // Format: YYYY-MM
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate secondMonthEnd
-    ) {
-        CompareMonthlySavingsDTO compareMonthlySavingsDTO = user.comparingMonthlySavingsDTO(userId,firstMonthStart,firstMonthEnd,secondMonthStart,secondMonthEnd);
-        return ResponseEntity.ok(compareMonthlySavingsDTO);
-    }
-
-
-
-
 
 }

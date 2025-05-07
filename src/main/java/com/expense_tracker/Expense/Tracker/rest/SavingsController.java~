@@ -51,7 +51,7 @@ public class SavingsController {
     }
 
 
-    @GetMapping("/users/{userId}/savings/compare")
+    @GetMapping("/users/{userId}/expenses/compare/{firstYear}/{firstMonth}/{secondYear}/{secondMonth}")
     @Operation(
             summary = "Compare monthly savings",
             description = "This api is used to compare monthly savings by providing the start and end dates of both the months",
@@ -86,10 +86,38 @@ public class SavingsController {
         List<AmountIndividuallySpentDTO> list = new ArrayList<>();
 
         for(Transaction transaction : transactionList){
+            if(transaction.getTransactionCategory()==1 || transaction.getTransactionAmount()<=amount) continue;
+            AmountIndividuallySpentDTO amountIndividuallySpentDTO = new AmountIndividuallySpentDTO(transaction.getDescription(),transaction.getTransactionAmount(),transaction.getCreatedOn());
+            list.add(amountIndividuallySpentDTO);
+        }
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/user/{userId}/item/{transactionName}")
+    @Operation(
+            summary = "Get Amount spent over a particular limit",
+            description = "This api is to get items spent over a particular limit",
+            security = @SecurityRequirement(name = "BearerAuthentication")
+    )
+    public ResponseEntity<List<AmountIndividuallySpentDTO>> getSavings(
+            @PathVariable int userId,
+            @PathVariable String transactionName,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate
+    )
+    {
+
+        List<Transaction> transactionList = transactionDetails.getTransactionWithDate(userId,fromDate,toDate);
+        List<AmountIndividuallySpentDTO> list = new ArrayList<>();
+
+        for(Transaction transaction : transactionList){
             if(transaction.getTransactionCategory()==1) continue;
             AmountIndividuallySpentDTO amountIndividuallySpentDTO = new AmountIndividuallySpentDTO(transaction.getDescription(),transaction.getTransactionAmount(),transaction.getCreatedOn());
             list.add(amountIndividuallySpentDTO);
         }
         return ResponseEntity.ok(list);
     }
+
+
+
 }

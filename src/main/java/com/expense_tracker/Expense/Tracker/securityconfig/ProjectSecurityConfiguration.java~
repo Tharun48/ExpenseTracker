@@ -39,6 +39,7 @@ public class ProjectSecurityConfiguration {
                 .requestMatchers(HttpMethod.POST,"/user/login").permitAll()
                 .requestMatchers("/error","/swagger-ui/**","/v3/api-docs/**","/swagger-ui/index.html","/favicon.ico","/swagger-ui.html").permitAll()
                 .requestMatchers("/otp/**").permitAll()
+                .anyRequest().authenticated()
         );
 
         http.logout(logout-> logout
@@ -60,7 +61,7 @@ public class ProjectSecurityConfiguration {
     }
      */
 
-    @Bean
+
     public AuthenticationManager authenticationManager(ExpenseTrackerUserDetailsService expenseTrackerUserDetailsService,PasswordEncoder passwordEncoder) {
         ExpenseTrackerAuthenticationProvider authenticationProvider =
                 new ExpenseTrackerAuthenticationProvider(expenseTrackerUserDetailsService,passwordEncoder);
