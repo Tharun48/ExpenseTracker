@@ -1,4 +1,0 @@
-package com.expense_tracker.Expense.Tracker.repository;
-
-public interface CategoryRepository {
-}
