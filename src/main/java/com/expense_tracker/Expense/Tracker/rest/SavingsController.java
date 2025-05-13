@@ -53,7 +53,7 @@ public class SavingsController {
 
     @GetMapping("/users/{userId}/expenses/compare/{firstYear}/{firstMonth}/{secondYear}/{secondMonth}")
     @Operation(
-            summary = "Compare monthly savings",
+            summary = "Compare monthly Expenses",
             description = "This api is used to compare monthly savings by providing the start and end dates of both the months",
             security = @SecurityRequirement(name = "BearerAuthentication")
     )
@@ -64,7 +64,7 @@ public class SavingsController {
             @PathVariable int secondYear,
             @PathVariable int secondMonth
     ) {
-        CompareMonthlySavingsDTO compareMonthlySavingsDTO = user.comparingMonthlySavingsDTO(userId,firstYear,firstMonth,secondYear,secondMonth);
+        CompareMonthlySavingsDTO compareMonthlySavingsDTO = transactionDetails.comparingMonthlySavingsDTO(userId,firstYear,firstMonth,secondYear,secondMonth);
         return ResponseEntity.ok(compareMonthlySavingsDTO);
     }
 
@@ -92,8 +92,5 @@ public class SavingsController {
         }
         return ResponseEntity.ok(list);
     }
-
-
-
 
 }

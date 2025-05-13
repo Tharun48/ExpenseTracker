@@ -60,7 +60,6 @@ public class UserController {
     )
     public ResponseEntity<UserResponseDTO> saveUser(@RequestBody UserLoginDTO userLoginDTO) {
         UserDetails userDetails = modelMapper.map(userLoginDTO, UserDetails.class);
-        userDetails.setPassword(passwordEncoder.encode(userLoginDTO.password()));
         int userID = user.saveUser(userDetails);
         return ResponseEntity.ok(new UserResponseDTO(userID));
     }

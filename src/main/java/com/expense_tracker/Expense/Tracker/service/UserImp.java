@@ -1,92 +1,72 @@
 package com.expense_tracker.Expense.Tracker.service;
 
-import com.expense_tracker.Expense.Tracker.dao.TransactionDAO;
-import com.expense_tracker.Expense.Tracker.dao.UserDAO;
-import com.expense_tracker.Expense.Tracker.model.CompareMonthlySavingsDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
 import com.expense_tracker.Expense.Tracker.model.UserDetails;
+import com.expense_tracker.Expense.Tracker.repository.TransactionRepository;
+import com.expense_tracker.Expense.Tracker.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserImp implements User{
 
-    UserDAO userDAO;
-    TransactionDAO transactionDAO;
+    UserRepository userRepository;
+    TransactionRepository transactionRepository;
+    PasswordEncoder passwordEncoder;
     @Autowired
-    UserImp(UserDAO userDAO,TransactionDAO transactionDAO){
-        this.userDAO=userDAO;
-        this.transactionDAO=transactionDAO;
+    UserImp(UserRepository userRepository,TransactionRepository transactionRepository,PasswordEncoder passwordEncoder) {
+        this.userRepository=userRepository;
+        this.transactionRepository=transactionRepository;
+        this.passwordEncoder=passwordEncoder;
     }
 
+    private boolean isUserExists(String userName) {
+        UserDetails user = userRepository.findByUserName(userName);
+        return user!=null;
+    }
 
     @Override
     @Transactional
     public int saveUser(UserDetails user) {
-        return userDAO.saveUserDAO(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(isUserExists(user.getUserName())) {
+            throw new IllegalArgumentException("User already exists with user-name " + user.getUserName());
+        }
+        UserDetails user1 = userRepository.save(user);
+        return user1.getUserId();
     }
 
     @Override
     public UserDetails getUser(int userId) {
-        return userDAO.getUserDAO(userId);
+        UserDetails user = userRepository.findByUserId(userId);
+        if(user==null) {
+            throw new IllegalArgumentException("User details not found for the userId: " + userId);
+        }
+        return user;
     }
 
     @Override
     @Transactional
     public int modifyUserDetails(UserDetails user) {
-        return userDAO.modifyUserDetailsDAO(user);
+        UserDetails user1 = userRepository.save(user);
+        user1.setPassword(passwordEncoder.encode(user.getPassword()));
+        return user1.getUserId();
     }
 
     @Override
     @Transactional
     public int deleteUser(int userId) {
-        return userDAO.deleteUserDAO(userId);
-    }
-
-    @Override
-    public CompareMonthlySavingsDTO comparingMonthlySavingsDTO(int userId, int firstYear, int firstMonth, int secondYear, int secondMonth) {
-
-        if(firstMonth<0||firstMonth>12||secondMonth<0||secondMonth>12)
-        {
-            throw new IllegalArgumentException("Month value is not valid");
+        UserDetails user = getUser(userId);
+        List<Transaction> transactionList = transactionRepository.getALlTransaction(userId);
+        for(Transaction transaction : transactionList) {
+            transactionRepository.delete(transaction);
         }
-
-        List<Transaction> month1 = transactionDAO.getTransactionBasedOnMonthAndYear(userId,firstYear,firstMonth);
-        List<Transaction> month2 = transactionDAO.getTransactionBasedOnMonthAndYear(userId,secondYear,secondMonth);
-        Map<String,double[]> map = new HashMap<>();
-        List<List<Transaction>> transactionList = new ArrayList<>();
-        transactionList.add(month1);
-        transactionList.add(month2);
-        int size = transactionList.size();
-        for(int i=0;i<size;i++) {
-            List<Transaction> transactions = transactionList.get(i);
-            for(Transaction transaction : transactions ) {
-                int transactionCategory = transaction.getTransactionCategory();
-                if(transactionCategory==1) continue;
-                String transactionName = transaction.getDescription();
-                transactionName = transactionName.trim().toLowerCase();
-                double amount=transaction.getTransactionAmount();
-                if(!map.containsKey(transactionName)) {
-                    double[] monthlyAmount = new double[size];
-                    monthlyAmount[i]=amount;
-                    map.put(transactionName,monthlyAmount);
-                }
-                else{
-                    double[] monthlyAmount = map.get(transactionName);
-                    monthlyAmount[i]+=amount;
-                    map.put(transactionName,monthlyAmount);
-                }
-            }
-        }
-        return new CompareMonthlySavingsDTO(map);
+        userRepository.delete(user);
+        return userId;
     }
-
 
 }

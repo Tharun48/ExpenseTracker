@@ -1,14 +1,15 @@
 package com.expense_tracker.Expense.Tracker.service;
 
-import com.expense_tracker.Expense.Tracker.dao.TransactionDAO;
-import com.expense_tracker.Expense.Tracker.dao.UserDAO;
+import com.expense_tracker.Expense.Tracker.exceptionhandler.BadRequestException;
+import com.expense_tracker.Expense.Tracker.model.CompareMonthlySavingsDTO;
 import com.expense_tracker.Expense.Tracker.model.SavingsResponseDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
-import com.expense_tracker.Expense.Tracker.model.UserDetails;
+import com.expense_tracker.Expense.Tracker.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,43 +17,56 @@ import java.util.Map;
 @Service
 public class TransactionDetailsImp implements TransactionDetails{
 
-    TransactionDAO transactionDAO;
-    UserDAO userDAO;
-    TransactionDetailsImp(TransactionDAO transactionDAO,UserDAO userDAO){
-        this.transactionDAO = transactionDAO;
-        this.userDAO = userDAO;
+
+    TransactionRepository transactionRepository;
+    User user;
+
+    TransactionDetailsImp(TransactionRepository transactionRepository,User user){
+        this.transactionRepository=transactionRepository;
+        this.user=user;
+    }
+
+    private boolean isValidTransactionCategory(int category) {
+        return category==1  || category==2;
     }
 
     @Override
-    @Transactional
     public int saveTransaction(Transaction transaction) {
-        if(transaction.getTransactionCategory()!=1 && transaction.getTransactionCategory()!=2) {
+        if(!isValidTransactionCategory(transaction.getTransactionCategory())) {
             throw new IllegalArgumentException("Invalid transaction category "+ transaction.getTransactionCategory() + " category should be 1 or 2");
         }
-        return transactionDAO.saveTransactionDAO(transaction);
+        Transaction transactional= transactionRepository.save(transaction);
+        return transactional.getTransactionId();
     }
 
     @Override
     public Transaction getTransaction(int transactionId) {
-        return transactionDAO.getTransactionDAO(transactionId);
+        Transaction transaction = transactionRepository.findByTransactionId(transactionId);
+        if(transaction==null) throw new IllegalArgumentException("Transaction details not found for the transactionId: " + transactionId);
+        return transaction;
     }
 
     @Override
     @Transactional
     public int modifyTransactionDetails(Transaction transaction) {
-        return transactionDAO.modifyTransactionDetailsDAO(transaction);
+        if(!isValidTransactionCategory(transaction.getTransactionCategory())) {
+            throw new IllegalArgumentException("Invalid transaction category "+ transaction.getTransactionCategory() + " category should be 1 or 2");
+        }
+        Transaction transactional=  transactionRepository.save(transaction);
+        return transactional.getTransactionId();
     }
 
     @Override
     @Transactional
     public int deleteTransaction(int transactionId) {
-        return transactionDAO.deleteTransactionDAO(transactionId);
+        Transaction transaction = getTransaction(transactionId);
+        transactionRepository.delete(transaction);
+        return transactionId;
     }
 
     @Override
     public SavingsResponseDTO savings(int userId, LocalDate fromDate, LocalDate toDate) {
-        userDAO.getUserDAO(userId);
-        List<Transaction> transactionList = transactionDAO.savings(userId,fromDate,toDate);
+        List<Transaction> transactionList = getTransactionWithDate(userId,fromDate,toDate);
         double totalSavings=0;
         Map<String,Double> map = new HashMap<>();
         for(Transaction transaction:transactionList) {
@@ -74,14 +88,64 @@ public class TransactionDetailsImp implements TransactionDetails{
 
     @Override
     public List<Transaction> getTransactionUser(int userId) {
-        return transactionDAO.getTransactionUser(userId);
+        return transactionRepository.getALlTransaction(userId);
     }
 
     @Override
     public List<Transaction> getTransactionWithDate(int userId, LocalDate fromDate, LocalDate toDate) {
-        userDAO.getUserDAO(userId);
-        return transactionDAO.savings(userId,fromDate,toDate);
+        user.getUser(userId);
+        if(fromDate!=null && toDate!=null) {
+            if(fromDate.isAfter(toDate)) throw new BadRequestException("fromDate should be less than toDate");
+            return transactionRepository.getTransactionBetweenDateRange(userId,fromDate,toDate);
+        }
+        else if(fromDate==null && toDate==null){
+            return transactionRepository.getALlTransaction(userId);
+        }
+        else if(fromDate!=null) {
+            return transactionRepository.getTransactionFromDate(userId,fromDate);
+        }
+        return transactionRepository.getTransactionToDate(userId,toDate);
     }
+
+    @Override
+    public CompareMonthlySavingsDTO comparingMonthlySavingsDTO(int userId, int firstYear, int firstMonth, int secondYear, int secondMonth) {
+
+        if(firstMonth<0||firstMonth>12||secondMonth<0||secondMonth>12)
+        {
+            throw new IllegalArgumentException("Month value is not valid");
+        }
+
+        List<Transaction> month1 = transactionRepository.getTransactionBasedOnMonthYear(userId,firstYear,firstMonth,2);
+        List<Transaction> month2 = transactionRepository.getTransactionBasedOnMonthYear(userId,secondYear,secondMonth,2);
+
+        Map<String,double[]> map = new HashMap<>();
+        List<List<Transaction>> transactionList = new ArrayList<>();
+        transactionList.add(month1);
+        transactionList.add(month2);
+        int size = transactionList.size();
+        for(int i=0;i<size;i++) {
+            List<Transaction> transactions = transactionList.get(i);
+            for(Transaction transaction : transactions ) {
+                int transactionCategory = transaction.getTransactionCategory();
+                if(transactionCategory==1) continue;
+                String transactionName = transaction.getDescription();
+                transactionName = transactionName.trim().toLowerCase();
+                double amount=transaction.getTransactionAmount();
+                if(!map.containsKey(transactionName)) {
+                    double[] monthlyAmount = new double[size];
+                    monthlyAmount[i]=amount;
+                    map.put(transactionName,monthlyAmount);
+                }
+                else{
+                    double[] monthlyAmount = map.get(transactionName);
+                    monthlyAmount[i]+=amount;
+                    map.put(transactionName,monthlyAmount);
+                }
+            }
+        }
+        return new CompareMonthlySavingsDTO(map);
+    }
+
 
 
 }

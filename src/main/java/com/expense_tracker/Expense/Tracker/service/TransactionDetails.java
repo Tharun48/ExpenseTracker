@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker.service;
 
+import com.expense_tracker.Expense.Tracker.model.CompareMonthlySavingsDTO;
 import com.expense_tracker.Expense.Tracker.model.SavingsResponseDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
 
@@ -14,4 +15,5 @@ public interface TransactionDetails {
     SavingsResponseDTO savings(int userId, LocalDate fromDate, LocalDate toDate);
     List<Transaction> getTransactionUser(int userId);
     List<Transaction> getTransactionWithDate(int userId, LocalDate fromDate, LocalDate toDate);
+    CompareMonthlySavingsDTO comparingMonthlySavingsDTO(int userId, int firstYear, int firstMonth, int secondYear, int secondMonth);
 }

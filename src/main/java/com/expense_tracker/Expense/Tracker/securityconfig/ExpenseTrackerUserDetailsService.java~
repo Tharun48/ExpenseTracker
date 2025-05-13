@@ -27,7 +27,8 @@ public class ExpenseTrackerUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.expense_tracker.Expense.Tracker.model.UserDetails userDetails = userRepository.findByUserName(username);
+        List<com.expense_tracker.Expense.Tracker.model.UserDetails> userDetail = userRepository.findByUserName(username);
+        com.expense_tracker.Expense.Tracker.model.UserDetails userDetails=userDetail.get(0);
         if(userDetails==null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
