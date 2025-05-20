@@ -1,9 +1,3 @@
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\dao\CategoryDAO.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\dao\CategoryDAOImp.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\dao\TransactionDAO.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\dao\TransactionDAOImp.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\dao\UserDAO.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\dao\UserDAOImp.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\exceptionhandler\BadRequestException.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\exceptionhandler\ExceptionHandler.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\ExpenseTrackerApplication.java
@@ -40,7 +34,6 @@ C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\repository\CategoryRepository.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\repository\TransactionRepository.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\repository\UserRepository.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\rest\CategoryController.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\rest\OTPController.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\rest\SavingsController.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\rest\TransactionController.java
@@ -48,8 +41,6 @@ C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\securityconfig\ExpenseTrackerAuthenticationProvider.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\securityconfig\ExpenseTrackerUserDetailsService.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\securityconfig\ProjectSecurityConfiguration.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\service\CategoryDetails.java
-C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\service\CategoryImp.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\service\OTPService.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\service\OTPServiceImp.java
 C:\development\ExpenseTracker\Expense-Tracker\src\main\java\com\expense_tracker\Expense\Tracker\service\TransactionDetails.java

@@ -103,7 +103,7 @@ public class UserDetails {
     }
 
     public void addTransaction(Transaction transaction) {
-        if(transactionList.isEmpty()) {
+        if( transactionList == null || transactionList.isEmpty()) {
             transactionList = new ArrayList<>();
         }
         transactionList.add(transaction);

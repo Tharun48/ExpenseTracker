@@ -1,6 +1,7 @@
 package com.expense_tracker.Expense.Tracker.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
@@ -24,7 +25,8 @@ public class Transaction {
     @Column(name="description")
     private String description;
 
-    @Column(name="transaction_amount")
+    @Column(name="transaction_amount",nullable = false)
+    @Min(value = 0, message = "transaction amount cannot be negative")
     private double transactionAmount;
 
     @ManyToOne
