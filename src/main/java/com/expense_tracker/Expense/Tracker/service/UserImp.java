@@ -5,6 +5,8 @@ import com.expense_tracker.Expense.Tracker.model.UserDetails;
 import com.expense_tracker.Expense.Tracker.repository.TransactionRepository;
 import com.expense_tracker.Expense.Tracker.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class UserImp implements User{
     UserRepository userRepository;
     TransactionRepository transactionRepository;
     PasswordEncoder passwordEncoder;
+    Logger logger = LoggerFactory.getLogger(UserImp.class);
     @Autowired
     UserImp(UserRepository userRepository,TransactionRepository transactionRepository,PasswordEncoder passwordEncoder) {
         this.userRepository=userRepository;
@@ -33,11 +36,20 @@ public class UserImp implements User{
     @Transactional
     public int saveUser(UserDetails user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if(isUserExists(user.getUserName())) {
-            throw new IllegalArgumentException("User already exists with user-name " + user.getUserName());
+        logger.trace("trace");
+        logger.debug("debug");
+        logger.info("info");
+        logger.warn("warning");
+        logger.error("error");
+
+        try{
+            UserDetails user1 = userRepository.save(user);
+            return user1.getUserId();
         }
-        UserDetails user1 = userRepository.save(user);
-        return user1.getUserId();
+        catch (Exception e) {
+            logger.error("user already exists with the user-name {} ",user.getUserName(),e);
+        }
+        return 0;
     }
 
     @Override

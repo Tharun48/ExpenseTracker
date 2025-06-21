@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class UserDetails {
     @Column(name="user_id")
     private int userId;
 
-    @Column(name="user_name")
+    @Column(name="user_name",unique = true)
     private String userName;
 
     @Column(name="password")
