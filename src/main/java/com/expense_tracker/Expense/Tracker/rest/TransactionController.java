@@ -7,7 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -90,6 +93,13 @@ public class TransactionController {
             list.add(transactionRequestDTO);
         }
         return ResponseEntity.ok(list);
+    }
+
+
+    //pagination check
+    @GetMapping("/transaction/check/user/{userId}")
+    public Page<Transaction> getTransactionCheck(@PathVariable int userId,@ParameterObject Pageable pageable) {
+        return transactionDetails.getTransactionUser1(userId,pageable);
     }
 
 }

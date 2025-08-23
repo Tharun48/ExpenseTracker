@@ -37,6 +37,7 @@ public class ProjectSecurityConfiguration {
                 .authorizeHttpRequests(request->request
                 .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST,"/user/login").permitAll()
+                .requestMatchers(HttpMethod.GET,"/transaction/user/**").permitAll()
                 .requestMatchers("/error","/swagger-ui/**","/v3/api-docs/**","/swagger-ui/index.html","/favicon.ico","/swagger-ui.html").permitAll()
                 .requestMatchers("/otp/**").permitAll()
                 .anyRequest().authenticated()

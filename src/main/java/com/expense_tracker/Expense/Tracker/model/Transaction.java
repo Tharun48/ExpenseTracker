@@ -1,5 +1,6 @@
 package com.expense_tracker.Expense.Tracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonIgnore
     private UserDetails user_transaction_id;
 
     public void addUser(UserDetails userDetails) {

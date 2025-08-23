@@ -2,6 +2,8 @@ package com.expense_tracker.Expense.Tracker.repository;
 
 import com.expense_tracker.Expense.Tracker.model.Transaction;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -31,5 +33,8 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
     @Query("SELECT t FROM Transaction t WHERE t.user_transaction_id.userId = :userId AND YEAR(t.createdOn) = :year AND MONTH(t.createdOn) = :month AND t.transactionCategory = :category")
     List<Transaction> getTransactionBasedOnMonthYear(@Param("userId") int userId,@Param("year") int year,@Param("month") int month,@Param("category") int transactionCategory);
 
+
+    @Query("SELECT t FROM Transaction t WHERE t.user_transaction_id.userId = :userId")
+    Page<Transaction> getALlTransactionCheck(@Param("userId") int userId,Pageable pageable);
 
 }

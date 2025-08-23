@@ -6,6 +6,8 @@ import com.expense_tracker.Expense.Tracker.model.SavingsResponseDTO;
 import com.expense_tracker.Expense.Tracker.model.Transaction;
 import com.expense_tracker.Expense.Tracker.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -89,6 +91,11 @@ public class TransactionDetailsImp implements TransactionDetails{
     @Override
     public List<Transaction> getTransactionUser(int userId) {
         return transactionRepository.getALlTransaction(userId);
+    }
+
+    @Override
+    public Page<Transaction> getTransactionUser1(int userId,Pageable pageable) {
+        return transactionRepository.getALlTransactionCheck(userId,pageable);
     }
 
     @Override
