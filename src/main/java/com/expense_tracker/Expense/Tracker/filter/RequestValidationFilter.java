@@ -13,13 +13,17 @@ import java.util.Base64;
 
 public class RequestValidationFilter implements Filter {
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if(header!=null){
             if(header.startsWith("Basic ")){
                 header = header.substring(6);
+                //this conversion to standard char set is not required as the spring internally handles the conversion
+                //after decoding the header using the base64, it has to be converted back to utf_8
+                //encoding process: username-password-> encoded using the standard utf_8 -> encoded using the base64 algorithm
                 byte[] base64=header.getBytes(StandardCharsets.UTF_8);
                 byte[] decode;
                 try{

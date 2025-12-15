@@ -32,7 +32,6 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    @JsonIgnore
     private UserDetails user_transaction_id;
 
     public void addUser(UserDetails userDetails) {

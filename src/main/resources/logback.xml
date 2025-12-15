@@ -1,6 +1,5 @@
 <configuration>
 
-
     <!--appending the logs to the file-->
     <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -8,14 +7,13 @@
                 %d{yyyy-MM-dd HH:mm:ss} [%thread] %-7level %logger{36} -%msg %n
             </pattern>
         </encoder>
-
     </appender>
 
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file> D:\development\ExpenseTracker\logs\ExpenseTracker.log </file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>D:\development\ExpenseTracker\logs\ExpenseTracker-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
+            <maxFileSize>1KB</maxFileSize>
             <maximumHistory>10</maximumHistory>
         </rollingPolicy>
         <encoder>

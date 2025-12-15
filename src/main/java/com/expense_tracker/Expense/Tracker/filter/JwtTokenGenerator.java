@@ -22,6 +22,8 @@ public class JwtTokenGenerator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String key = ApplicationConstants.key;
+        //this hmacshaKey method takes the key in the byte format and check if your key
+        // is feasible to be the key for the token
         SecretKey secretKey = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String jwt = Jwts.builder()

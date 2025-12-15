@@ -12,6 +12,8 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
@@ -31,8 +33,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class ProjectSecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.
-                csrf(csrf -> csrf.disable())
+        http
+                .cors(cors -> cors.disable())
+                .csrf(csrf -> csrf.disable())
+                .addFilterBefore(new RequestValidationFilter(),BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(request->request
                 .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
@@ -63,7 +67,8 @@ public class ProjectSecurityConfiguration {
      */
 
     @Bean
-    public AuthenticationManager authenticationManager(ExpenseTrackerUserDetailsService expenseTrackerUserDetailsService,PasswordEncoder passwordEncoder) {
+    public AuthenticationManager authenticationManager(ExpenseTrackerUserDetailsService expenseTrackerUserDetailsService,
+                                                       PasswordEncoder passwordEncoder) {
         ExpenseTrackerAuthenticationProvider authenticationProvider =
                 new ExpenseTrackerAuthenticationProvider(expenseTrackerUserDetailsService,passwordEncoder);
         ProviderManager providerManager = new ProviderManager(authenticationProvider);
