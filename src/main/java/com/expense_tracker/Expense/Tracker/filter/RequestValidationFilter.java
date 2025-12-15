@@ -15,9 +15,16 @@ public class RequestValidationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if ("OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod())) {
+            filterChain.doFilter(servletRequest,servletResponse);
+            return;
+        }
+
         if(header!=null){
             if(header.startsWith("Basic ")){
                 header = header.substring(6);
@@ -34,12 +41,6 @@ public class RequestValidationFilter implements Filter {
                         throw new com.expense_tracker.Expense.Tracker.exceptionhandler.BadRequestException("Invalid basic authentication token ");
                     }
                     String userName=userPass.substring(0,index);
-                    if(userName.contains("test")) {
-                        httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                        httpServletResponse.setContentType("application/json");
-                        httpServletResponse.getWriter().write("{\"error\": \"Invalid basic authentication token\"}");
-                        return;
-                    }
                 }
                 catch (RuntimeException e) {
                     throw new BadRequestException("Failed to decode username and password");

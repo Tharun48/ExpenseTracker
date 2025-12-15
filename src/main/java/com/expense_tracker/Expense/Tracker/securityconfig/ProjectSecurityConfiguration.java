@@ -1,31 +1,27 @@
 package com.expense_tracker.Expense.Tracker.securityconfig;
 
-import com.expense_tracker.Expense.Tracker.filter.JwtTokenGenerator;
 import com.expense_tracker.Expense.Tracker.filter.JwtTokenValidator;
 import com.expense_tracker.Expense.Tracker.filter.RequestValidationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -34,11 +30,12 @@ public class ProjectSecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.disable())
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(new RequestValidationFilter(),BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(request->request
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST,"/user/login").permitAll()
                 .requestMatchers(HttpMethod.GET,"/transaction/user/**").permitAll()
@@ -65,6 +62,28 @@ public class ProjectSecurityConfiguration {
         return new JdbcUserDetailsManager(dataSource);
     }
      */
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOrigins(List.of(
+                "http://127.0.0.1:5500",
+                "http://localhost:5500"
+        ));
+
+        config.setAllowedMethods(List.of(
+                "GET","POST","PUT","DELETE","OPTIONS"
+        ));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
 
     @Bean
     public AuthenticationManager authenticationManager(ExpenseTrackerUserDetailsService expenseTrackerUserDetailsService,

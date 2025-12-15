@@ -35,6 +35,10 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         if(header!=null && header.startsWith("Bearer")) {
             try{
                 String key = ApplicationConstants.key;
